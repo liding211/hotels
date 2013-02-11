@@ -1,0 +1,4864 @@
+---
+City:
+  actAs:
+    Sluggable:
+      unique: true
+      fields: [name]
+      canUpdate: true
+    Timestampable:
+  columns:
+    # general
+    name: string(255)
+    time_offset:
+      type: integer(1)
+      notnull: true
+    twitter: string(255)
+    facebook: string(255)
+    bg_image: string(255)
+    bg_color: string(255)
+    css: string(255)
+    referal_amount: integer
+    referal_timeframe: integer
+    referal_for: integer
+    postal_code_start: integer(11)
+    postal_code_end: integer(11)
+    priority_city:
+      type: boolean
+      default: false
+    postal_code_central: integer(11)
+    weight: integer
+    created_at: timestamp
+    updated_at: timestamp
+    shipping_default_on:
+      type: boolean
+      default: false
+ 
+Banner:
+  actAs: [ Timestampable ]
+  columns:
+    name: string(255)
+    url: string(255)
+    image: string(255)
+    parameters: clob
+    run_at: timestamp
+    end_at: timestamp
+    
+
+Vendor:
+  actAs: [ Timestampable ]
+  columns:
+    # as subscriber
+    email: string(255)
+    password: string(255)
+    name: string(255)
+    avatar: string(255)
+    address: string(255)
+    postal_code: integer
+    phone_number: string(255)
+    website: string(255)
+    credentials_sent: boolean
+    pdf: string(255)
+    partner:
+      type: boolean
+      default: true
+    max_percent_refunded: integer
+    survey_sent: boolean
+    survey_sent_date: timestamp
+    last_logged_in: timestamp
+    is_shipping_on: boolean
+    
+    abn: string(255)
+    bank_name: string(255)
+    bank_branch_address: string(255)
+    
+    bank_code: string(255)
+    branch_code: string(255)
+    domicile: string(255)
+    rib_key: string(255)
+    
+    account_holder: string(255)
+    bsb: string(255)
+    account_number: string(255)
+
+    government: string(255)
+    iban: string(255)
+    swift: string(255)
+    routing: string(255)
+    sort_code: string(255)
+    beneficiary_name: string(255)
+
+  indexes:
+    emailname: { fields: [email, name], type: unique }
+
+PurchaseShipping:
+  actAs: [ Timestampable ]
+  tableName: v_purchase_shipping
+  columns:
+    member_id:
+      type: integer
+      notnull: true
+    full_name: string(255)
+    shipping_address: string(255)
+    shipping_address2: string(255)
+    apt_unit: string(255)
+    phone: string(255)
+    country: string(50)
+    city: string(255)
+    state_province: string(255)
+    postal_code: integer
+    offer_id: integer
+
+
+Member:
+  actAs: [ Timestampable ]
+  columns:
+    # as subscriber
+    email: string(255)
+    
+    sub_postal_code: string(255)
+      
+    #bsb
+    account_name: string(255)
+    account: string(255)
+    bsb: string(255)  
+
+    # internal
+    role: string(255)
+    origin: string(255)
+    email_confirmation_code: string(255)
+
+    # as member
+    name: string(255)
+    password: string(255)
+    ip: string(15)
+    avatar:  string(255)
+    email_notification: boolean
+    refer_id: integer
+    invited_at: timestamp
+    invite_bonus_payed_at: timestamp
+
+    # statistic
+    gender: string(20)
+    salutation: string(20)
+    source_domain:  string(255)
+    source_ad:  string(255)
+    source_keyword:  string(255)
+    source_adgroup:  string(255)
+    source_medium:  string(255)
+    source_campaign:  string(255)
+    source_landingpage:  string(255)
+    subaffiliate_id: integer(11)
+    
+    ext1_updated: boolean
+
+    fb_id: integer
+
+    city_id: integer
+    first_name: string(255)
+    last_name: string(255)
+    activated:
+      type: boolean
+      default: false
+
+    recovery_email: string(255)
+    my_campaigns_id: integer
+    date_of_birth: date
+    forgot_password_hash: string(40)
+    phone: string(255)
+    verified:
+      type: boolean
+      default: false
+    verified_code: string(255)
+    confirmed: integer(1)
+    confirmation_key: string(255)
+    welcomed:
+      type: boolean
+      default: false
+    disabled:
+      type: boolean
+      default: false
+    disabled_at: timestamp
+    deleted:
+      type: boolean
+      default: false
+    rand: integer(11)
+    has_subscription: boolean
+    briteverify_email_invalid:
+      type: boolean
+      default: false
+    fully_unsubscribed_at: timestamp
+    last_logged_in: timestamp
+    
+    #smartbox
+    sbx_welcome_sent_at: timestamp
+    imported_at: timestamp
+    member_smartbox_id: integer(20)
+    smartbox_subscription_status:
+      type: boolean
+      default: false
+    smartbox_sync:
+      type: boolean
+      default: true
+    mail_operator_id:
+      type: integer
+      default: 0
+  relations:
+    MemberCredits:
+      local: id
+      foreign: member_id
+      type: many
+      class: MemberCredits
+    Member_shipping_address:
+      local: id
+      foreign: member_id
+      type: many
+      class: Member_shipping_address
+    Member_billing:
+      local: id
+      foreign: member_id
+      type: many
+      class: Member_billing
+    
+    MemberCreditsAnonymous: ~
+    Subscribtions:
+      refClass: MemberSubscribe
+      class: Geotarget
+      local: member_id
+      foreign: geotarget_id
+    Referer: 
+      foreignAlias: Referals
+      class: Member
+      local: refer_id
+    City: ~
+    Redemption_codes:
+      foreign: user_id
+      class: RedemptionCode
+    ReferrerRole:
+      class: MemberReferrerRole
+      local: id
+      foreign: member_id  
+      type: one
+      
+  indexes:
+    email: { fields: [email], type: unique }
+    
+ 
+MemberDomainFields: 
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer(10)
+    domain: string(255)
+    password: string(255)
+
+
+Member_shipping_address:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer
+    #shipping
+    first_name: string(255)
+    last_name: string(255)
+    shipping_address: string(255)
+    city: string(255)
+    phone: string(255)
+    shipping_address2: string(255)
+    postal_code: integer(10)
+    country: string(255)
+    state_province: string(255)
+    apt_unit: string(255)
+    email: string(255)
+    date_of_birth: date
+    salutation: string(20)
+    recipient_name: string(255)
+    delivery_instructions: string(255)
+    is_delivery_instructions:
+      type: boolean
+      default: false
+    is_smartbox:
+      type: boolean
+      default: false
+
+Member_billing:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer
+    # billing info - credit card
+    card_type: string(255)
+    card_number: string(255)
+#    security_number: string(255)
+    expiration_date: date
+
+Ogone_declined_card:
+  actAs: [ Timestampable ]
+  columns:
+    order_id: integer
+    card_number: string(255)
+    expiration_date: string(255)
+    error: string(255)
+
+Anz_declined_card:
+  actAs: [ Timestampable ]
+  columns:
+    order_id: integer
+    card_number: string(255)
+    expiration_date: string(255)
+    error: string(255)
+    error_response: clob
+    last_sent_post_data: clob
+
+Tagline:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer
+    tagline: string(255)
+
+Paypal_failed_transaction:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer
+    email: string(255)
+    domain: string(255)
+    request: clob
+    result: clob   
+    express_checkout_details: clob
+    server: clob
+
+Purchase_billing:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer
+    purchase_id: integer
+    # billing info - credit card
+    card_type: string(255)
+    card_number: string(255)
+#    security_number: string(255)
+    expiration_date: date
+    
+    
+V_offer_financial:
+  columns:
+
+    #offer
+    ouffer_margin: integer(20)
+    cat_name: string(100)
+    price: float
+    cost_price: float
+    vendor_name: string(255)
+    city_name: string(255)
+    offer_view_count: integer(10)
+    original_commission: integer(10)
+    run_at: timestamp
+    end_at: timestamp
+    run_at_city: timestamp
+    end_at_city: timestamp
+    expires_on: timestamp
+    payment_percent: float
+    is_gst_included:
+      type: boolean
+      default: false
+    salesperson_name1: string(255)
+    salesperson_name2: string(255)
+    
+    #offer stats
+    offer_id: integer(20)
+    multi_price_id: integer(20)
+    bought_deal: integer(11)
+    vouchers_refunded: integer(11)
+    vouchers_consumed: integer(11)
+    revenue_sold: integer(11)
+    revenue_refunded: integer(11)
+    revenue_sold_shipping: integer(11)
+    revenue_refunded_shipping: integer(11)
+    sum_credit: integer(11)
+    members_bought: integer(11)
+    taxable_commission: integer(11)
+    domain: string(20)
+
+    #calculate
+    revenue_sold_with_shipping: integer(10)
+    revenue_after_refunds: integer(10)
+    bought_div_view: integer(10)
+    net_revenue: integer(10)
+
+
+Offer:
+  actAs: [ Timestampable ]
+  columns:
+
+    int_completion_date: timestamp
+    vendor_website: string(255)
+    city_id: integer
+    original_deal_id: integer
+    is_upcoming: boolean
+    is_visible_for_vendor_preview: boolean
+    is_upcoming_show: boolean
+    april_fools: boolean
+    disable_boutique_seal: boolean
+    gault_millau_logo: boolean
+    disable_sharing: boolean
+    is_available_main_faq: boolean
+    percent_refunded: integer
+    activated_purchase_id: integer
+    geotarget_id: integer
+    members_only: boolean
+    using_redemption_codes: integer
+    ouffer_name: string
+    ouffer_newsletter_name: string
+    ouffer_short_header: string(255)
+    title_all_deal_page: string(255)
+    category_offer_newsletter: string(255)
+    ouffer_sub_header: string(255)
+    slug: string(255)
+    voucher_name: string(255)
+    summary: clob
+    # real price of the deal
+    ouffer_value: float
+    # price suggested by ouffer.com
+    price: float
+    minimum_quantity: integer
+    maximum_quantity: integer
+    vendor_id: integer
+    vendor_name_in_offer: string(255)
+    vendor_additional_text: string(255)
+    vendor_avatar: string(255)
+    first_for_vendor: integer(1)
+    main_vertical_site_id: integer(10)
+    salesperson_id1: integer
+    salesperson_id2: integer
+    contract_signature_date: date
+    payment_percent: float
+    shipping_payment_percent: integer
+    original_commission: integer
+    original_liability: integer
+    good_to_know: clob
+    noteworthy: string
+    run_at: timestamp
+    end_at: timestamp
+    expires_on_days: integer
+    run_at_city: timestamp
+    end_at_city: timestamp
+    expires_on: timestamp
+    location: string(255)
+    referral_email_count: integer
+    referral_email_why: clob
+    limit_by_user: integer
+    ouffer_margin: integer
+    cost_price: integer
+    has_shipping: 
+       type: boolean
+       default: false
+    has_shopping_cart_shipping: 
+       type: boolean
+       default: false
+    shipping_grids_id: integer(11)
+    shipping_type: integer(1)
+    price_mode: boolean
+    hide_deal_counter: integer(1)
+    block_referral_bonus: integer(1)
+    block_voucher_print: integer(1)
+    block_voucher_print_date: timestamp
+    block_voucher_print_message: string(255)
+    offer_location: integer(1)
+    special: integer(1)
+    referral_amount: integer(10)
+    deal_right_text: string(255) 
+    sub_city_id: integer(10)
+    bg_image: string(255)
+    bg_color: string(255)
+    css: string(255)
+    barcode: string(255)
+    bought_deal: integer
+    share_number: float
+    
+    voucher_logo: string(255)
+    
+    #vouchers_refunded: integer(10)
+    #vouchers_consumed: integer(10)
+    #revenue_sold: integer(10)
+    #revenue_refunded: integer(10)
+    #revenue_sold_shipping: integer(10)
+    #revenue_refunded_shipping: integer(10)
+    #sum_credit: integer(10)
+    #members_bought: integer(10)
+    
+    reserved_count: integer
+    
+    is_smart_box:
+      type: boolean
+      default: true
+    share_on:
+      type: boolean
+      default: false
+    offer_multi_prices:
+      type: boolean
+      default: false
+    multi_prices_properties:
+      type: boolean
+      default: false
+    third_party_delivery:
+      type: boolean
+      default: false  
+    show_in_past:
+      type: boolean
+      default: false
+    request_shipping_address:
+      type: boolean
+      default: false
+    exclude_today: boolean
+    ouffer_value_hide: boolean
+    exclude_main_deal:
+      type: boolean
+      default: false
+    gift_mode:
+      type: boolean
+      default: true  
+    voucher_campaign:
+      type: boolean
+      default: false  
+    credit_deal:
+      type: boolean
+      default: false 
+    is_pss:
+      type: boolean
+      default: false   
+    rating: integer
+
+    content_person_id: integer
+    writer_person_id: integer
+    formatter_person_id: integer
+    image_specialist_person_id: integer
+    editor_person_id: integer
+
+    deal_status_id: integer
+    photo_status_id: integer
+    
+    scheduled_run_date: timestamp
+    scheduled_run_date_year: integer(10)
+    scheduled_run_date_month: integer(2)
+    scheduled_run_date_day: integer(2)
+    scheduled_run_date_period: varchar(1)
+	
+    deals_scheduled_run_date: timestamp
+    deals_scheduled_run_date_year: integer(10)
+    deals_scheduled_run_date_month: integer(2)
+    deals_scheduled_run_date_day: integer(2)
+    deals_scheduled_run_date_period: varchar(1)
+
+    vr_pack_status: integer(1)
+    vr_rep_id: integer
+
+    rating: integer
+    daily_sent_at: timestamp
+    strength_index: integer
+    disable_redemption: boolean
+    is_code_caps:
+      type: boolean
+      default: false
+    expired_sent:
+      type: boolean
+      default: false
+    recipient_count: integer
+    cancellation_date: timestamp
+    is_complex_locations:
+      type: boolean
+      default: false
+    is_hide_map:
+      type: boolean
+      default: false
+    show_vendor_map:
+      type: boolean
+      default: true
+    show_vendor_website:
+      type: boolean
+      default: true
+    show_vendor_address:
+      type: boolean
+      default: true
+    show_vendor_name:
+      type: boolean
+      default: true
+    show_vendor_phone:
+      type: boolean
+      default: false
+    refund_alert_sent:
+      type: boolean
+      default: false
+    is_gst_included:
+      type: boolean
+      default: false
+    no_index:
+      type: boolean
+      default: false
+    hidden_in_side:
+      type: boolean
+      default: false
+    payment_delay: integer(6)
+    first_payment_date: timestamp
+    show_multi_price_id: integer(20)
+    show_multi_discount_id: integer(20)
+    tracking_required:
+      type: boolean
+      default: false
+    shipping_received: timestamp
+    need_update:
+      type: boolean
+      default: false
+    payment_scheme_id: integer(11)
+    shipping_invoice: integer(1)
+  relations:
+    Salesperson1:
+      local: salesperson_id1
+      class: Salesperson
+    Salesperson2:
+      local: salesperson_id2
+      class: Salesperson
+    Sub_city:
+      local: sub_city_id
+      class: Sub_city  
+    Offer_cities:
+      local: id
+      foreign: offer_id
+      type: many
+      class: Offer_cities
+    OfferComment:
+      local: id
+      foreign: offer_id
+      type: one
+      class: OfferComment  
+    OfferAllCities:
+      local: id
+      foreign: offer_id
+      type: many
+      class: Offer_cities 
+    Offer_images:
+      local: id
+      foreign: offer_id
+      type: many
+      class: Offer_images 	
+    OfferAllCategories:
+      local: id
+      foreign: offer_id
+      type: one
+      class: OfferAllCategories  
+    Offer_tabs:
+      local: id
+      foreign: offer_id
+      type: many
+      class: Offer_tabs
+    Offer_locations:
+      local: id
+      foreign: offer_id
+      type: many
+      class: Offer_locations
+    Offer_view_count:
+      local: id
+      foreign: offer_id
+      class: Offer_view_count   
+    Geotarget:
+      local: geotarget_id
+      class: Geotarget
+    Vendor:
+      local: vendor_id
+      class: Vendor
+      foreignAlias: CreatedOuffers
+      onDelete: CASCADE 
+    Sample_sale_category:
+      class: SampleSaleCategory
+      local: id
+      type: many
+      foreign: offer_id 
+    Sample_sale_products:
+      class: SampleSaleProducts
+      local: id
+      type: many
+      foreign: offer_id    
+    City: ~
+    ContentPerson:
+      class: sfGuardUser
+      local: content_person_id
+      foreignAlias: ContentPersonOffers
+    WriterPerson:
+      class: sfGuardUser
+      local: writer_person_id
+      foreignAlias: WriterPersonOffers
+    FormatterPerson:
+      class: sfGuardUser
+      local: formatter_person_id
+      foreignAlias: FormatterPersonOffers
+    ImageSpecialistPerson:
+      class: sfGuardUser
+      local: image_specialist_person_id
+      foreignAlias: ImageSpecialistPersonOffers
+    EditorPerson:
+      class: sfGuardUser
+      local: editor_person_id
+      foreignAlias: EditorPersonOffers
+    VrRep:
+      class: sfGuardUser
+      local: vr_rep_id
+      foreignAlias: VrRepOffers
+    Sites:
+      class: VerticalSites
+      refClass: VerticalSitesOffer
+      local: offer_id
+      foreign: vertical_site_id
+    MainSite:
+      class: VerticalSites
+      local: main_vertical_site_id
+      foreign: id    
+      type: one
+    VerticalSitesCategory:
+      class: Category
+      refClass: VerticalSitesOfferCategory
+      local: offer_id
+      foreign: category_id
+    Brands:
+      class: Domains
+      refClass: DomainOffers
+      local: offer_id
+      foreign: domain_id
+    ShippingGrids: ~
+    PaymentScheme: ~
+    OfferStatus:
+      class: OfferStatus
+      local: id
+      foreign: offer_id
+      type: one
+    Slugs:
+      class: OfferMultiSlug
+      local: id
+      foreign: offer_id
+      type: many
+
+OfferStats:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(11)
+    multi_price_id: integer(20)
+    bought_deal: integer(11)
+    vouchers_refunded: integer(11)
+    vouchers_consumed: integer(11)
+    revenue_sold: integer(11)
+    revenue_refunded: integer(11)
+    revenue_sold_shipping: integer(11)
+    revenue_refunded_shipping: integer(11)
+    sum_credit: integer(11)
+    members_bought: integer(11)
+    taxable_commission: integer(11)
+    domain_id: integer(11)
+    domain: string(20)
+    gst: integer(11)
+    total_payable_to_us: integer(11)
+    total_payable_to_vendor: integer(11)
+    outstanding_to_vendor: integer(11)
+    snapshot: clob
+  relations:
+    Offer:
+      type: one
+      foreignType: one
+    Offer_multi_price:
+      class: Offer_multi_prices
+      local: multi_price_id
+      foreign: id
+    Domain:
+      local: domain_id
+      class: Domains
+      type: one
+
+Offer_view_count:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(20)
+    offer_id: integer(20)
+    count: integer(20)
+    
+    
+Offer_view_daily_stats:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(20)
+    count: integer(20)
+    offer_id: integer(20)
+    day: date
+
+
+Offer_tabs:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(20)
+    name: varchar(255)
+    content: text
+
+OfferCancelComment:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer
+    cancel_comment: clob
+  relations:
+    Offer:
+      type: one
+      foreignType: one
+
+Shopping_cart:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer
+    use_credit: integer
+    session_id: varchar(255)
+    promo_code: varchar(255)
+    domain: varchar(255)
+    session_expire: timestamp
+    cart: text
+    member_credit_id: integer
+
+Shopping_cart_reserved:
+  actAs: [ Timestampable ]
+  columns:
+    shopping_cart_id: integer
+    offer_id: integer
+    quantity: integer
+    multi_price_id: integer
+    sample_sale_products_stock_id: integer
+    properties_stock_id: integer
+
+Purchases_group:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer
+    member_id: integer
+    backend_member_id: integer
+    total: float
+    storage_id: varchar(255)
+    external_transaction_id: varchar(255)
+    transaction_id: varchar(255)
+    transaction_status: integer
+    transaction_message: string(255)
+    member_credit_id: integer(20)
+    payment_system: varchar(255)
+    gift:
+      type: boolean
+      default: false
+    type_fs: varchar(30)  
+  relations:
+    Member:
+      class: Member
+      local: member_id
+      type: one
+      foreign: id  
+    Purchase: 
+      class: Purchase
+      local: transaction_id
+      foreign: transaction_id
+      type: many   
+      
+Purchase_trackings:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer
+    group_id: integer
+    purchase_id: integer
+    transaction_id: varchar(255)
+    name: varchar(255)
+    status: integer(20)
+    url: varchar(255)
+    info: clob
+
+    
+Purchase_paypal:
+  columns:
+    id: integer
+    transaction_status: integer
+    transaction_message: string(255)
+    transaction_id: string(255)
+    is_checked: boolean
+    status: integer
+    info: text
+    purchase_created: datetime
+    cart_total: float
+    
+Purchase:
+  actAs: [ Timestampable ]
+  columns:
+    member_id:
+      type: integer
+      notnull: true
+    offer_id:
+      type: integer
+      notnull: true
+    quantity: 
+      type: integer
+      notnull: true
+    email: string(255)
+    payment_system: string(255)
+    transaction_status: integer
+    transaction_message: string(255)
+    transaction_id: string(255)
+    external_transaction_id: varchar(255)
+    refund_status: boolean
+    use_credit: integer
+    total: float
+    total_excluding_refunds: float
+    alias: integer
+    use_shipping: float
+    shipping_refunded: float
+    use_shipping_id: integer(10)
+    use_multi_price_shipping_item_id: integer(10)
+    use_sample_sale_shipping_item_id: integer(10)
+    use_shopping_cart_shipping_id: integer(10)
+    shipping_grids_ranges_id: integer(11)
+    shopping_cart_shipping: integer(11)
+    vertical_site_id: integer(10)
+    shipping_address_id: integer(10)
+    shipping_type: integer(1)
+    multi_price_id: integer(10)
+    sub_domain_discount: integer(10)
+    location_id: integer(10)
+    source_domain: string(255)
+    source_campaign: string(255)
+    offer_properties_values: string(255)
+    source_adgroup: string(255)
+    source_medium: string(255)
+    source_content: string(255)
+    source_landingpage: string(255)
+    subaffiliate_id: integer(11)
+    ruid: string(255)
+    new_member: integer(1)
+    my_campaigns_id: integer
+    share_x: float
+    gift_quantity: integer(10)
+    gift:
+      type: boolean
+      default: false
+    has_shipping:
+      type: boolean
+      default: false  
+
+    promo_code_id: integer
+    promo_amount: float
+    htc_purchase_type: integer(4)
+    htc_referrer: string(255)
+    mobile: boolean
+    shipping_refund_cheque: string
+    domain_id: integer(9)
+    domain: string(255)
+    subdomain: string(255)
+    config_id: integer(10)
+    properties_stock_id: integer(10)
+
+  relations:
+    Member:
+      foreignAlias: Purchases
+      onDelete: CASCADE
+    Offer:
+      foreignAlias: Purchases
+      onDelete: CASCADE
+    Offer_multi_price:
+      class: Offer_multi_prices
+      local: multi_price_id
+      foreign: id
+    PromoCode: ~
+    Sample_sale_purchase:
+      class: SampleSalePurchase
+      local: id
+      type: one
+      foreign: purchase_id   
+    Purchase_billing:
+      class: Purchase_billing
+      local: id
+      type: one
+      foreign: purchase_id
+    Site:
+      class: VerticalSites
+      local: vertical_site_id
+      type: one
+    ShippingAddress:
+      class: ShippingAddress
+      local: shipping_address_id
+      type: one
+    Config:
+      class: Configs
+      local: config_id
+      type: one  
+    Domain:
+      class: Domains
+      local: domain_id
+      type: one
+    ShippingGridsRanges: ~
+
+PurchaseTransactionAll:
+  actAs: [ Timestampable ]
+  columns:
+    purchase_id: integer
+    transaction_all: clob
+  relations:
+    Purchase:
+      type: one
+      foreignType: one
+    V_purchase_admin:
+      type: one
+      foreignType: one
+      foreign: id
+      local: purchase_id
+
+MemberSubscribe:
+  actAs: [ Timestampable ]
+  columns:
+    member_id:
+      type: integer
+      notnull: true
+    mailing_list_id:
+      type: integer(20)
+      notnull: true
+    geotarget_id:
+      type: integer
+      notnull: true
+    domain_id:
+      type: integer
+      notnull: true
+    city_id:
+      type: integer
+      notnull: true
+    city_slug: string(255)
+    city_zip: integer(10)
+    frequency: string(255)
+  indexes:
+    member_mailing_geotarget_domain: { fields: [ member_id, mailing_list_id, geotarget_id, domain_id ], type: unique }
+  relations:
+    City: ~
+    Member:
+      foreignAlias: Subscribtions
+      onDelete: CASCADE
+    MailingList:
+      local: mailing_list_id
+      class: MailingList
+    Domain:
+      local: domain_id
+      class: Domains
+    Geotarget:
+      foreignAlias: Subscribtions
+      onDelete: CASCADE
+    VerticalSites:
+      local: mailing_list_id
+      foreign: mailing_list_id
+
+PurchasePart:
+  actAs: [ Timestampable ]
+  columns:
+    purchase_id: integer
+    part_num: integer
+    is_used: boolean
+    redeemed: boolean
+    redemption_date: timestamp
+    redemption_code: string(32)
+    amount: float
+    amount_refunded: float
+    hidden: boolean
+    vendor_location_id: integer(10)
+    gift_id: integer(20)
+    shipping_amount: float
+    shipping_refunded: float
+    block_voucher_print: boolean
+  relations:
+    Purchase:
+      foreignAlias: PurchaseParts
+    Gift:
+      foreign: voucher_id
+      local: id
+      type: one
+
+PurchasePartRefund:
+  actAs: [ Timestampable ]
+  columns:
+    purchase_part_id: integer
+    amount_refunded: float
+    shipping_refunded: float
+    way_of_reimbursing: integer
+    purchase_id: integer
+    offer_id: integer
+    use_credit: float
+    message: string(255)
+    cheque: string(255)
+    email: varchar(255)
+    manual_code: varchar(255)
+  relations:
+    PurchasePart:
+      foreignAlias: Refunds
+    V_voucher_admin:
+      foreignAlias: Refunds
+      foreign: id
+      local: purchase_part_id
+
+Configuration:
+  actAs: [ Timestampable ]
+  columns:
+    param:
+      type: string(255)
+      primary: true
+    val: string
+
+Unsubscribe:
+  actAs: [ Timestampable ]
+  columns:
+    member_id:
+      type: integer
+      notnull: true
+    zip:
+      type: integer
+      notnull: false
+    city_id:
+      type: integer
+      notnull: false
+    mailing_list_id:
+      type: integer
+      notnull: true
+    geotarget_id:
+      type: integer
+      notnull: true
+    domain_id:
+      type: integer
+      notnull: true
+    reason: integer
+    reason_text: string(255)
+    email: string(255)
+    city: string(255)
+    country: string(2)
+  relations:
+    Member:
+      foreignAlias: Unsubscribes
+      onDelete: CASCADE
+    Geotarget:
+      foreignAlias: Unsubscribes
+      onDelete: CASCADE
+      
+Txn:
+  actAs: [ Timestampable ]
+  columns:
+    code: string(25)
+
+PayPalStandard:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer
+    offer_id: integer
+    mc_gross: string(255)
+    protection_eligibility: string(255)
+    address_status: string(255)
+    payer_id: string(255)
+    tax: string(255)
+    address_street: string(255)
+    payment_date: string(255)
+    payment_status: string(255)
+    charset: string(255)
+    address_zip: string(255)
+    first_name: string(255)
+    address_country_code: string(255)
+    address_name: string(255)
+    notify_version: string(255)
+    custom: string(255)
+    payer_status: string(255)
+    business: string(255)
+    address_country: string(255)
+    address_city: string(255)
+    quantity: string(255)
+    verify_sign: string(255)
+    payer_email: string(255)
+    txn_id: string(255)
+    payment_type: string(255)
+    last_name: string(255)
+    address_state: string(255)
+    receiver_email: string(255)
+    receiver_id: string(255)
+    pending_reason: string(255)
+    txn_type: string(255)
+    item_name: string(255)
+    mc_currency: string(255)
+    item_number: string(255)
+    residence_country: string(255)
+    test_ipn: string(255)
+    handling_amount: string(255)
+    transaction_subject: string(255)
+    payment_gross: string(255)
+    shipping: string(255)
+    reject_reason: string(255)
+
+      
+ShippingAddress:
+  actAs: [ Timestampable ]
+  columns:
+    member_id:
+      type: integer
+      notnull: true
+    first_name: string(255)
+    last_name: string(255)
+    shipping_address: string(255)
+    shipping_address2: string(255)
+    recipient_name: string(255)
+    phone: string(255)
+    country: string(50)
+    apt_unit: string(255)
+    city: string(255)
+    state_province: string(255)
+    postal_code: integer
+    email: string(255)
+    delivery_instructions: string(255)
+    is_delivery_instructions:
+      type: boolean
+      default: false
+    date_of_birth: date
+    salutation: string(20)
+  relations:
+    Member:
+      foreignAlias: ShippingAddresses
+      onDelete: CASCADE
+       
+OfferReferralEmail:
+  actAs: [ Timestampable ]
+  columns:
+    member_id:
+      type: integer(10)
+      notnull: true
+    offer_id:
+      type: integer(10)
+      notnull: true
+    referral_email_count:
+      type: integer(10)
+      notnull: true
+    referral_emails:
+      type: clob
+      notnull: true
+  relations:
+    Member:
+      foreignAlias: OfferReferralEmail
+      onDelete: CASCADE
+    Offer:
+      foreignAlias: OfferReferralEmail
+      onDelete: CASCADE
+      
+Pages:
+  actAs: [ Timestampable ]
+  columns:
+     title: string(255)
+     slug: string(255)
+     head: clob
+     css: clob
+     css_ie_seven: clob
+     css_ie_eight: clob
+     js: clob
+     html: clob
+     animate_text: clob
+     credits: integer(10)
+     credit_chunk: float
+     credit_deal_price_minimum: float
+     credit_expire: timestamp
+     credit_expire_in_days: integer(6)
+     expire_in_days: boolean
+     expires_on: timestamp
+     animate_time: integer(10)
+     animate_side: string(255)
+     animate_step: integer(10)
+     animate_timeout: integer(10)
+     url: string(255)
+     signup_message: clob
+     images_dir: string(255)
+     bg_image: string(255)
+     gen_new_image: string(255)
+     gen_image: string(255)
+     gen_rotate: integer(10)
+     gen_discount_type: integer(10)
+     gen_discount: integer(10)
+     send_password: boolean
+     page_signup: 
+       type: boolean
+       default: false
+     cdn: 
+       type: boolean
+       default: false
+     block: 
+       type: boolean
+       default: false
+     deleted: 
+       type: boolean
+       default: false  
+  relations:
+     Brands:
+       class: Domains
+       refClass: PagesBrand
+       local: page_id
+       foreign: domain_id    
+       
+       
+PagesBrand:
+  actAs: [ Timestampable ]
+  columns:
+     page_id: integer(11)
+     domain_id: integer(11)
+  relations:
+    Domain:
+      class: Domains
+      local: domain_id
+      type: one
+    Page:
+      class: Pages
+      local: page_id
+      type: one
+       
+
+Html:
+  actAs: [ Timestampable ]
+  columns:
+     shtitle: string(255)
+     name: string(50)
+     f1: string(50)
+     f2: string(50)
+     f3: string(50)
+     f4: string(50)
+     urlput: string(255)
+     imgtitle: string(255)
+     f5text: clob(0)
+     f6text: clob(20)
+     f7text: clob(20)
+     f8text2: clob(20)
+     f9text2: clob(20)
+     f10text2: clob(20)
+
+Team:
+  actAs: [ Timestampable ]
+  columns:
+     lastname: string(255)
+     textteam: clob(200)
+     image: string(255)
+ 
+
+LookLp:
+  actAs: [ Timestampable ]
+  columns:
+    email: string(255)
+    about: string(1000)
+    page_id: integer(11)
+    
+Geotarget:
+  actAs: [ Timestampable ]
+  columns:
+    city_id:
+      type: integer
+      notnull: true
+    country: string(2)
+    city: string(255)
+    zip: integer(10)
+    lat: double
+    lng: double
+  relations:
+    City: ~
+    
+Campaign:
+  actAs: [ Timestampable ]
+  columns:
+    city_id: integer
+    sub_city_id: integer
+    mailing_list_id: integer(20)
+    domain_id: integer
+    external_campaign_id: clob
+    external_members_storage_id: integer(11)
+    custom_list_id: string(50)
+    message_id: clob
+    send_id: string(255)
+    status: integer(1)
+    error_retry: integer(1)
+    send_type: integer(1)
+    send_date: timestamp
+    campaign_type: integer(1)
+    template: integer(1)
+    banner_id: integer(20)
+    use_ext_db: boolean
+    email_subject: clob
+    mm_system: string(255)
+    members_limit: integer(10)
+    members_count: integer(10)
+    members_type: integer(1)
+    offer_activity_start: timestamp
+    offer_inactivity_start: timestamp
+    last_purchase: integer(2)
+    additional_condition: integer(1)
+    received_campaigns: integer(2)
+    opened_campaigns: integer(2)
+    never_purchased_deals_id: clob
+    cities: clob
+    mailing_lists: clob
+    postcodes_around: clob
+    postcodes_range: clob
+    member_status: integer(1)
+    member_gender: integer(1)
+    member_traffic_sources: clob
+    deals_data: clob
+    files_data: clob
+    split_data: clob
+    split_value: integer(3)
+    split_hour_delay: integer(3)
+    origin: string(255)
+    frequency: integer(1)
+    performed_at: timestamp
+    is_split_send: boolean
+  relations:
+    MailingList:
+      local: mailing_list_id
+      class: MailingList
+    CampaignBanner:
+      local: banner_id
+      class: CampaignBanner
+  
+CampaignTracker:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer
+    received: integer
+    opened: integer
+    clicked: integer
+  indexes:
+    member_id: { fields: [member_id], type: unique }
+
+CampaignTrackerUrl:
+  actAs: [ Timestampable ]
+  columns:
+    url: string(128)
+  indexes:
+    url: { fields: [url], type: unique }
+
+CampaignsMembers:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer
+    campaign_id: integer
+    received: boolean
+  indexes:
+    campaign_member: { fields: [campaign_id, member_id], type: unique }
+
+CampaignBanner:
+  actAs: [ Timestampable ]
+  columns:
+    name: string(255)
+    image: string(255)
+    link: string(255)
+  indexes:
+    name: { fields: [name], type: unique }
+
+CampaignSplitSend:
+  actAs: [ Timestampable ]
+  columns:
+    campaign_id: integer
+    delivery_profile_id: string(255)
+    members_count: integer
+    status: integer(1)
+    message_id: clob
+  indexes:
+    campaign_id: { fields: [campaign_id] }
+  relations:
+    Campaign:
+      local: campaign_id
+      class: Campaign
+
+Member_campaign:
+  actAs: [ Timestampable ]
+  columns:
+    member_id:
+      type: integer
+      primary: true
+    campaign_id:
+      type: integer
+      primary: true
+    code: string(255)
+    first_click_date: timestamp
+    click_date: timestamp
+    mail_sent: integer(10)
+    sync: integer(1)
+  relations:
+    Member:
+      foreignAlias: Members
+      onDelete: CASCADE
+    Campaign:
+      foreignAlias: Campaigns
+      onDelete: CASCADE
+      
+Offer_prices:
+  actAs: [ Timestampable ]
+  columns:
+    deal_id: integer(10)
+    quantity_from: integer(10)
+    price: float
+  relations:
+    Offer:
+      local: deal_id
+      foreign: id
+      foreignAlias: Prices
+    
+Offer_multi_prices:
+  actAs: [ Timestampable ]
+  columns:
+    deal_id: integer(10)
+    sample_sale_products_id: integer(20)
+    sample_sale_params: string(255)
+    price: float
+    cost_price: integer
+    ouffer_value: integer(10)
+    maximum_quantity: integer(10)
+    ouffer_margin: integer(10)
+    description: clob
+    how_to_use: clob
+    bought: integer(10)
+    expires_on: timestamp
+    expires_on_days: integer(10)
+    barcode: string(255)
+    properties: string(255)
+    reserved_count: integer
+    
+    vouchers_refunded: integer(10)
+    vouchers_consumed: integer(10)
+    revenue_sold: integer(10)
+    revenue_refunded: integer(10)
+    revenue_sold_shipping: integer(10)
+    revenue_refunded_shipping: integer(10)
+    sum_credit: integer(10)
+    members_bought: integer(10)
+    position: integer(10)
+    
+  relations:
+    Offer:
+      local: deal_id
+      foreign: id
+      foreignAlias: MultiPrices
+    SampleSaleProducts:
+      local: sample_sale_products_id
+      foreign: id
+      foreignAlias: MultiPrices
+    Shipping:
+      class: MultiPricesShipping
+      local: id
+      foreign: offer_multi_prices_id  
+      type: one   
+      
+      
+
+MultiPricesShipping:
+  actAs: [ Timestampable ]
+  columns:
+    offer_multi_prices_id: integer(20)
+    shipping_type: integer(1) 
+    has_shipping: 
+       type: boolean
+       default: false
+    has_get_deal_shipping: 
+       type: boolean
+       default: true   
+    third_party_delivery: 
+       type: boolean
+       default: false
+    has_shopping_cart_shipping: 
+       type: boolean
+       default: false
+    shipping_grids_id: integer(11)
+  relations:
+     Items:
+       class: MultiPricesShippingItems
+       local: offer_multi_prices_id
+       foreign: offer_multi_prices_id
+       type: many
+     ShippingGrids: ~
+       
+MultiPricesShippingItems:
+  actAs: [ Timestampable ]
+  columns:
+    offer_multi_prices_id: integer(20)
+    price: integer(20) 
+    cost_price: integer(20) 
+    name: string(255)   
+    position: integer(20)
+    deleted: boolean
+
+TrackingCode:
+  actAs: [ Timestampable ]
+  columns:
+    utm_source: string(255)
+    tracking_codes: clob
+    tracking_codes_buy: clob
+    
+Category:
+  actAs:
+    Timestampable: ~
+    NestedSet:
+      hasManyRoots: true
+      rootColumnName: root_id
+  columns:
+    id:
+      type: integer(11)
+      primary: true
+      autoincrement: true
+    vertical_site_id: integer(10)
+    parent_id: integer(10)
+    name: string(100)
+    slug: string(255)
+    url_parameters: string(255)
+    description: clob
+    shipping_default_on:
+      type: boolean
+      default: false
+    is_old:
+      type: boolean
+      default: false  
+    created_at: timestamp
+    updated_at: timestamp
+  relations:
+    Site:
+      class: VerticalSites
+      local: vertical_site_id 
+    Files:
+      class: CategoryFiles
+      local: id
+      foreign: category_id   
+      type: many     
+      
+CategoryFiles:
+  actAs: [ Timestampable ]
+  columns:
+     category_id: integer(11)
+     domain_id: integer(11)
+     name: string(255)
+     file: string(255)
+  relations:
+    Category:
+      class: Category
+      local: category_id
+      type: one 
+    Domain:
+      class: Domains
+      local: domain_id
+      type: one     
+    
+    
+RedemptionCode:
+  actAs: [ Timestampable ]
+  columns:
+    deal_id: integer(20)
+    code: string(32)
+    used: boolean
+    user_id: integer(20)
+    purchase_id: integer(20)
+    offer_multiprice_id: integer(10)
+    sample_sale_products_id: integer(11)
+  relations:
+    Offer:
+      local: deal_id
+      class: Offer
+  indexes:
+    dealcode: { fields: [deal_id, code], type: unique }
+        
+Vendor_locations:
+  actAs: [ Timestampable ]
+  columns:
+    vendor_id: integer(10)
+    name: string(255)
+    email: string(255)
+    password: string(255)
+    address: clob
+    city: string(255)
+    postcode: integer(10)
+    last_logged_in: timestamp
+  relations:
+    Vendor:
+      local: vendor_id
+      class: Vendor  
+      
+Offer_locations:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(10)
+    location_id: integer(10)
+  relations:
+    Vendor_locations:
+      local: location_id
+      class: Vendor_locations
+      
+Offer_properties:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(10)
+    name: string(255)
+    property_values: clob
+    message: string(255)
+    is_required: boolean
+  relations:
+    Offer:
+      local: offer_id
+      class: Offer
+    Offer_properties_values:
+      local: id
+      class: Offer_properties_values
+    Offer_properties_stock:
+      local: id
+      class: Offer_properties_stock  
+      
+      
+Offer_properties_stock:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(10)
+    quantity: integer(10)
+    sold: integer(10)
+    reserved_count: integer(10)
+    params: string(255)
+    params_value: string(255)
+
+         
+
+Offer_properties_values:
+  actAs: [ Timestampable ]
+  columns:
+    offer_property_id: integer(10)
+    offer_id: integer(10)
+    purchase_id: integer(10)
+    name: string(255)
+    property_value: string(255)
+  relations:
+    Purchase:
+      local: purchase_id
+      class: Purchase
+    Offer:
+      local: offer_id
+      class: Offer
+    Offer_properties:
+      local: offer_property_id
+      class: Offer_properties
+
+Salesperson:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(20)
+    first_name: string(20)
+    last_name: string(20)
+    email_address: string(20)
+    inactive: boolean
+
+Faq:
+  actAs: [ Timestampable ]
+  columns:
+    id:
+      type: integer(11)
+      primary: true
+      autoincrement: true
+    member_id:
+      type: integer
+    offer_id:
+      type: integer
+      notnull: true
+    question: clob
+    answer: clob
+    status: integer(1)
+    domain: string(20)
+  relations:
+    Member:
+      local: member_id
+      foreignAlias: Faqs
+      type: one
+      onDelete: CASCADE
+    Offer:
+      foreignAlias: Faqs
+      onDelete: CASCADE
+      
+Schedule:
+  actAs: [ Timestampable ]
+  columns:
+    run_at: timestamp
+    status: integer(1)
+    class: string(255)
+    method: string(255)
+    params: string
+
+Payments:
+  actAs: [ Timestampable ]
+  columns:
+    id:
+      type: integer(11)
+      primary: true
+      autoincrement: true
+    invoice_id: integer(11)
+    offer_id:
+      type: integer
+      notnull: true
+    domain_id: integer(11)
+    amount: float
+    date: date
+    transfer_type: integer(4)
+    identification_number: string(255)
+    type: integer(4)
+    pay_type: integer(4)
+    vouchers_redeemed: clob
+    percentage_of_shipping_paid: integer(6)
+    reason: clob
+    summary: integer
+    domain: string(100)
+    remittance: string(255)
+    created_at: timestamp
+    updated_at: timestamp
+  relations:
+    Offer:
+      foreignAlias: Payments
+      onDelete: CASCADE
+    Invoice:
+      class: Invoice
+      local: invoice_id
+      foreign: id
+      foreignAlias: Payments
+    Domain:
+      local: domain_id
+      class: Domains
+      type: one
+      
+Number_ids:
+  actAs: [ Timestampable ]
+  columns:
+    number_id: integer(11)
+    city_id: integer(11) 
+    
+Lafcity_ids:
+  actAs: [ Timestampable ]
+  columns:
+    city_id: integer(11)
+    lafcity_id: integer(11)          
+
+Layovers:
+  actAs: [ Timestampable ]
+  columns:
+    id:
+      type: integer(11)
+      primary: true
+      autoincrement: true
+    name: string(100)
+    url: string(100)
+    credit_registration: float
+    credit_subscription: float
+    credit_chunk: float
+    credit_deal_price_minimum: float
+    credit_expire: timestamp
+    credit_expire_in_days: integer(6)
+    expire_in_days: boolean
+    expires_on: timestamp
+    css: clob
+    js: clob
+    body: clob
+    folder: string(100)
+    height: integer(6)
+    width: integer(6)
+    send_password: boolean
+    modal: boolean
+    close_button: boolean
+  relations:
+     Brands:
+       class: Domains
+       refClass: LayoversBrand
+       local: layover_id
+       foreign: domain_id    
+       
+LayoversBrand:
+  actAs: [ Timestampable ]
+  columns:
+     layover_id: integer(11)
+     domain_id: integer(11)
+  relations:
+    Domain:
+      class: Domains
+      local: domain_id
+      type: one
+    Layover:
+      class: Layovers
+      local: layover_id
+      type: one
+
+LayoversCredited:
+  actAs: [ Timestampable ]
+  columns:
+    member_id:
+      type: integer(20)
+      primary: true
+    layover_id:
+      type: integer(11)
+    credit: integer(11)
+    created_at: timestamp
+    updated_at: timestamp
+  relations:
+    Member:
+      foreignAlias: LayoversCredited
+      onDelete: CASCADE
+    Layovers:
+      foreignAlias: LayoversCredited
+      onDelete: CASCADE
+
+Offer_coupons:
+  actAs: [ Timestampable ]
+  columns:
+    body: clob 
+    deal_id: integer(11)
+  relations:
+    Offer:
+      local: deal_id
+      foreign: id
+      foreignAlias: Coupons
+
+Api_keys:
+  actAs: [ Timestampable ]
+  columns:
+    name: string(255)
+    api_key: string(255)
+    enabled:       
+      type: boolean
+      default: true
+
+Api_methods:
+  actAs: [ Timestampable ]
+  columns:
+    method: string(50)
+    name: string(50)
+
+Api_keys_access:
+  actAs: [ Timestampable ]
+  columns:
+    api_key_id: integer(11)
+    api_method_id: integer(11)
+    denied:
+      type: boolean
+      default: false
+  relations:
+    Api_keys:
+      local: api_key_id
+      foreign: id
+      foreignAlias: Api_keys
+      type: one
+    Api_methods:
+      local: api_method_id
+      foreign: id
+      foreignAlias: Api_methods
+      type: one
+
+Contract:
+  actAs: [ Timestampable ]
+  columns:
+    data_entry_member_id: integer
+    vendor_id: integer
+    city_id: integer
+    offer_id: integer
+    category_id: integer
+    salesperson_id1: integer
+    salesperson_id2: integer
+    contract_signature_date: timestamp
+    deal_title: string(1000)
+    deal_price: integer
+    deal_cost_price: integer
+    deal_value: integer
+    commission: integer
+    initial_payment: integer
+    shipping_initial_payment: integer
+    date_of_expiration: timestamp
+    date_of_expiration_days: integer
+    website: string(255)
+    restrictions: clob
+    validation_status_id: integer
+    submitted_for_review: boolean
+    is_gst_included:
+      type: boolean
+      default: false
+    attachment: string(255)
+    attachment_original: string(255)
+    validation_date: timestamp
+    rating: integer
+	
+    scheduled_run_date_year: integer(10)
+    scheduled_run_date_month: integer(2)
+    scheduled_run_date_day: integer(2)
+    scheduled_run_date_period: varchar(1)
+
+    deals_scheduled_run_date: timestamp
+    deals_scheduled_run_date_year: integer(10)
+    deals_scheduled_run_date_month: integer(2)
+    deals_scheduled_run_date_day: integer(2)
+    deals_scheduled_run_date_period: varchar(1)
+	
+    additional_information: clob
+    main_vertical_site_id: integer(10)
+    payment_delay: integer(6)
+    tracking_required:
+      type: boolean
+      default: false
+    payment_scheme_id: integer(11)
+    shipping_invoice: integer(1)
+  relations:
+    Vendor:
+      local: vendor_id
+      class: Vendor
+      foreignAlias: Contracts
+      onDelete: CASCADE
+    DataEntryMember:
+      local: data_entry_member_id
+      class: Member
+      foreignAlias: EnteredContracts
+    City: ~
+    Salesperson1:
+      local: salesperson_id1
+      class: Salesperson
+    Salesperson2:
+      local: salesperson_id2
+      class: Salesperson
+    Offer:
+      type: one
+      foreignType: one
+    Validators:
+      refClass: ContractValidator
+      class: sfGuardUser
+      foreign: member_id
+      foreignAlias: Contracts
+    Sites:
+      class: VerticalSites
+      refClass: VerticalSitesOffer
+      local: contract_id
+      foreign: vertical_site_id
+    MainSite:
+      class: VerticalSites
+      local: main_vertical_site_id
+      foreign: id    
+      type: one
+    VerticalSitesCategory:
+      class: Category
+      refClass: VerticalSitesOfferCategory
+      local: contract_id
+      foreign: category_id
+    Brands:
+      class: Domains
+      refClass: DomainOffers
+      local: contract_id
+      foreign: domain_id  
+    PaymentScheme: ~
+    
+ContractValidator:
+  actAs: [ Timestampable ]
+  columns:
+    contract_id:
+      type: integer
+      primary: true
+    member_id:
+      type: integer
+      primary: true
+  relations:
+    Contract:
+      foreignAlias: ContractValidators
+      onDelete: CASCADE
+    Member:
+      foreignAlias: ContractValidators
+      class: sfGuardUser
+      local: member_id
+      onDelete: CASCADE
+
+ContractComment:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer
+    contract_id: integer
+    deal_id: integer
+    deal_comment_type: integer
+    content:
+      type: clob
+      notnull: true
+    hash: string(64)
+  relations:
+    Member:
+      foreignAlias: Comments
+      class: sfGuardUser
+      local: member_id
+      onDelete: CASCADE
+    Contract:
+      foreignAlias: DiscussionComments
+      onDelete: CASCADE
+    Offer:
+      foreignAlias: DiscussionComments
+      onDelete: CASCADE
+      local: deal_id
+
+ContractCommentFile:
+  actAs: [ Timestampable ]
+  columns:
+    contract_comment_id:
+      type: integer
+    filename:
+      type: string(255)
+      notnull: true
+    filesize:
+      type: integer
+      notnull: true
+  relations:
+    ContractComment:
+      foreignAlias: Files
+    Contract:
+      foreignAlias: ContractCommentFiles
+      refClass: ContractComment
+      class: Contract
+      local: id
+      foreign: contract_id
+    Offer:
+      foreignAlias: OfferCommentFiles
+      refClass: ContractComment
+      class: Offer
+      local: id
+      foreign: deal_id
+
+ContractSchedule:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(20)
+    contract_id: integer(20)
+    send_on: timestamp
+    type: integer(11)
+  relations:
+    Contract:
+      local: contract_id
+      class: Contract 
+
+My_campaigns:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer(10)
+    name: string(255)
+    code: string(255)
+    total: integer(10)
+    deleted: boolean
+  relations:
+    Member:
+      local: member_id
+      class: Member 
+
+Payouts:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer(10)
+    check_number: integer(10)
+    check_amount: integer(10)
+    member_id: integer(10)
+    member_email: string(255)
+    account_name: string(255)
+    account: string(255)
+    bsb: string(255)
+    shipping_address_full_name: string(255)
+    shipping_address_shipping_address: string(255)
+    shipping_address_city: string(255)
+    shipping_address_phone: string(255)
+    shipping_address_shipping_address2: string(255)
+    shipping_address_postal_code: integer(10)
+    shipping_address_country: string(255)
+    date: timestamp
+    check_radio: integer
+  relations:
+    Member:
+      local: member_id
+      class: Member
+      
+Member_payouts:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer(10)
+    c_total: integer(10)
+    p_total: integer(10)
+    balance: integer(10)
+    send_notification: integer(10)
+  relations:
+    Member:
+      local: member_id
+      class: Member             
+
+OfferAttachment:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(20)
+    offer_id: integer(20)
+    member_id: integer(20)
+    filename: string(255)
+    comment: clob
+    type: integer(6)
+  relations:
+    Offer:
+      local: offer_id
+      class: Offer
+    Member:
+      class: sfGuardUser
+      local: member_id
+
+Gift:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(20)
+    purchase_id: integer(20)
+    voucher_id: integer(20)
+    deal_id: integer(20)
+    member_id: integer(20)
+    email: string(255)
+    first_name: string(255)
+    last_name: string(255)
+    text: clob
+    messages: clob
+    theme: integer(20)
+    quantity: integer(20)
+    address: string(255)
+    address_optional: string(255)
+    city: string(255)
+    postal_code: integer(20)
+    country: string(255)
+    create_date: timestamp
+    update_date: timestamp
+    send:       
+      type: boolean
+      default: false
+    block_print:       
+      type: boolean
+      default: false  
+    deleted:       
+      type: boolean
+      default: false  
+    print:       
+      type: boolean
+      default: false  
+  relations:
+    Member:
+      local: member_id
+      class: Member
+    PurchasePart:
+      local: voucher_id
+      foreign: id
+      class: PurchasePart
+      type: one
+    Purchase:
+      local: purchase_id
+      class: Purchase
+    Offer:
+      local: deal_id
+      class: Offer  
+      
+Sub_city:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(20)
+    city_id: integer(20)
+    name: string(255)
+    slug: string(255)
+    bg_image: string(255)
+    bg_color: string(255)
+    css: string(255)
+    created_at: timestamp
+    updated_at: timestamp
+    shipping_default_on:
+      type: boolean
+      default: false
+
+
+  relations:
+    City:
+      local: city_id
+      class: City
+
+MemberCredits:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(20)
+    member_id: integer(20)
+    initial_credit: integer(11)
+    credit: integer(11)
+    chunk: integer(11)
+    deal_price_minimum: integer(11)
+    expire: timestamp
+    available_from: timestamp
+    redeemed: 
+      type: boolean
+      default: false
+    congratulated: 
+      type: boolean
+      default: false
+    source_campaign: string(255)
+    refer_id: integer(20)
+    refer_offer_id: integer(20)
+    credit_in_popup: integer(11)
+    period: integer(1)
+    parent_id: integer(20)
+    incentive_credits_id: integer(11)
+  relations:
+    Member:
+      local: member_id
+      class: Member 
+    Referer: 
+      foreignAlias: Referals
+      class: Member
+      local: refer_id
+    Brands:
+       class: Domains
+       refClass: MemberCreditsBrand
+       local: member_credits_id
+       foreign: domain_id
+    IncentiveCredits: ~
+
+VendorSurvey:
+  actAs: [ Timestampable ]
+  columns:
+    vendor_id: integer(20)
+    feature_went: string(256)
+    consider_another_feature: boolean
+    why_not_consider_another_feature: string(256)
+    project_comparison: string(256)
+    project_comparison_comments: string(256)
+    thoughts_of_customers: string(256)
+    thoughts_of_improvements: string(256)
+    level_of_service: integer(1)
+  relations:
+    Vendor:
+      local: vendor_id
+      class: Vendor 
+
+MemberCreditsAnonymous:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(20)
+    email: string(255)
+    credit: float
+    chunk: float
+    deal_price_minimum: float
+    expire: timestamp
+    source_campaign: string(255)
+    refer_id: integer(20)
+    refer_offer_id: integer(20)
+    message_campaign: clob
+    sent: integer(1)
+  relations:
+    Referer: 
+      class: Member
+      local: refer_id
+
+Press:
+  actAs: [ Timestampable ]
+  columns:
+    category: integer(2)
+    provider: string(256)
+    date: timestamp
+    title: string(256)
+    logo: string(100)
+    presentation_type: integer(1)
+    link_to_article: string(256)
+    article_text: clob
+    document: string(100)
+  relations:
+     Brands:
+       class: Domains
+       refClass: PressBrand
+       local: press_id
+       foreign: domain_id   
+        
+       
+PressBrand:
+  actAs: [ Timestampable ]
+  columns:
+     press_id: integer(11)
+     domain_id: integer(11)
+  relations:
+    Domain:
+      class: Domains
+      local: domain_id
+      type: one
+    Press:
+      class: Press
+      local: press_id
+      type: one
+      
+          
+
+AnniversaryReferrals:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer(20)
+    offer_id:
+      type: integer(20)
+      notnull: true
+    quantity: 
+      type: integer
+      notnull: true
+  relations:
+    Member:
+      local: member_id
+      class: Member
+    Offer:
+      local: offer_id
+      class: Offer
+      
+Offer_meta:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(10)
+  relations:
+    Offer:
+      local: offer_id
+      class: Offer
+      type: one
+      foreignType: one
+
+Offer_howtouse:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(10)
+    how_to_use: clob
+  relations:
+    Offer:
+      local: offer_id
+      class: Offer
+      type: one
+      foreignType: one
+
+Offer_bottom_comment:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(10)
+    bottom_comment: clob
+  relations:
+    Offer:
+      local: offer_id
+      class: Offer
+      type: one
+      foreignType: one
+
+
+Offer_the_offer:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(10)
+    header: string(100)
+    the_offer: clob
+  relations:
+    Offer:
+      local: offer_id
+      class: Offer
+      type: one
+      foreignType: one
+
+ApiLog:
+  actAs: [ Timestampable ]
+  columns:
+    referer: clob
+    url: clob
+    result: string(255)
+    date: timestamp
+    
+Email_notification:
+  actAs: [ Timestampable ]
+  columns:
+    email: string(255)
+
+EmailWhitelist:
+  actAs: [ Timestampable ]
+  columns:
+    email: string(255)
+
+OfferReview:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer
+    reviews: clob
+  relations:
+    Offer:
+      local: offer_id
+      class: Offer
+      type: one
+      foreignType: one
+
+Utm_codes:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(20)
+    domain_id: integer(10)
+    utm_type: integer(10)
+    utm_id: integer(10)
+    utm: clob
+  relations:
+    Domain:
+      local: domain_id
+      class: Domains
+      type: one  
+
+Report:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(11)
+    report_key: string(255)
+    filename: string(255)
+    description: string(255)
+    email: string(255)
+    status: integer(11)
+  relations:
+    ReportParameters:
+      local: id
+      foreign: report_id
+      type: one
+      foreignType: one
+      class: ReportParameters
+
+    
+ReportParameters:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(11)
+    report_id: integer(11)
+    parameters: clob
+    fields: clob
+  relations:
+    Report:
+      local: report_id
+      class: Report
+    
+
+Help:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(11)
+    parent_id: integer(11)
+    domain_id: integer(10)
+    title: string(255)
+    text: clob
+    form: clob
+    order_num: integer(11)
+
+HelpResults:
+  columns:
+    id: integer(20)
+    hid: integer(11)
+    body: clob
+    added: timestamp
+
+PromoCode:
+  actAs: [ Timestampable ]
+  columns:
+    code_action:
+      type: integer
+      notnull: true
+      default: 0
+    code:
+      type: varchar(255)
+      notnull: true
+    cut_percent_before: integer
+    cut_percent_after: integer
+    reduce_price_by: integer
+    offer_shipping_costs:
+      type: boolean
+      default: false
+    promo_code_category_id: integer
+    use_multiple_times:
+      type: boolean
+      default: false
+    min_price: integer
+    valid_from: timestamp
+    valid_to: timestamp
+    subscribers_only: boolean
+    registration_date_from: timestamp
+    emails: clob
+    emails_exclude: clob
+    first_buy: boolean
+    bonzai_game:
+      type: boolean
+      default: 0
+    category_id: integer
+  indexes:
+    code: { fields: [code], type: unique }
+  relations:
+    PromoCodeCategory: ~
+    Category: ~
+    Purchase:
+      local: id
+      foreign: promo_code_id
+      class: Purchase
+
+OfferPromoCode:
+  columns:
+    offer_id: integer
+    promo_code_id: integer
+  relations:
+    Offer: ~
+    PromoCode: ~
+
+PromoCodeCategory:
+  columns:
+    name:
+      type: varchar(255)
+      notnull: true
+    accept_muliple: boolean
+  indexes:
+    name: { fields: [name], type: unique }
+
+Offer_edit:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer(10)
+    deal_id: integer(10)
+    tab_id: integer(10)
+    time: integer(10)
+    member_name: string(255)
+    ip: string(255)
+    kick:
+      type: boolean
+      default: false 
+
+Poll_result:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(11)
+    member_id: integer(11)
+    result: integer(11)
+  relations:
+    Member:
+      local: member_id
+      class: Member
+
+V_offer_admin:
+  columns:
+    vr_rep_fname: string(255)
+    vr_rep_lname: string(255)
+    int_completion_date: timestamp
+    city_id: integer
+    cancellation_date: timestamp
+    activated_purchase_id: integer
+    geotarget_id: integer
+    using_redemption_codes: integer
+    ouffer_name: string
+    ouffer_short_header: string(255)
+    ouffer_sub_header: string(255)
+    slug: string(255)
+    voucher_name: string(255)
+    summary: clob
+    # real price of the deal
+    ouffer_value: float
+    # price suggested by ouffer.com
+    price: float
+    minimum_quantity: integer
+    maximum_quantity: integer
+    vendor_id: integer
+    salesperson_id1: integer
+    salesperson_id2: integer
+    contract_signature_date: date
+    payment_percent: float
+    contract_validation_status_id: integer
+    reserved_count: integer
+    good_to_know: clob
+    noteworthy: string
+    run_at: timestamp
+    end_at: timestamp
+    run_at_city: timestamp
+    end_at_city: timestamp
+    expires_on: timestamp
+    location: string(255)
+    referral_email_count: integer
+    referral_email_why: clob
+    limit_by_user: integer
+    ouffer_margin: integer
+    max_percent_refunded: integer
+    has_shipping: integer(1)
+    shipping_type: integer(1)
+    price_mode: boolean
+    hide_deal_counter: integer(1)
+    block_referral_bonus: integer(1)
+    block_voucher_print: integer(1)
+    offer_location: integer(1)
+    special: integer(1)
+    referral_amount: integer(10)
+    deal_right_text: string(255) 
+    sub_city_id: integer(10)
+    bg_image: string(255)
+    bg_color: string(255)
+    css: string(255)
+    barcode: string(255)
+    bought_deal: integer
+    share_number: float
+    exclude_today: boolean
+    created_at: timestamp
+    updated_at: timestamp
+    rating: integer
+    vr_pack_status: integer(1)
+    vr_rep_id: integer
+    writer_person_name: string(255)
+    writer_person_id: integer
+    formatter_person_name: string(255)
+    formatter_person_id: integer
+    image_specialist_person_name: string(255)
+    image_specialist_person_id: integer
+    editor_person_name: string(255)
+    editor_person_id: integer
+    deal_status_id: integer
+    photo_status_id: integer
+    main_vertical_site_id: integer
+    city_name: string(255)
+    #revenue_sold: integer
+    #sum_credit: integer
+    #revenue_refunded: integer
+    show_in_past: boolean
+    is_pss:
+      type: boolean
+      default: false 
+        
+    vendor_name: string(255)
+    offer_view_count: integer(10)
+
+    scheduled_run_date: timestamp
+    scheduled_run_date_year: integer(10)
+    scheduled_run_date_month: integer(2)
+    scheduled_run_date_day: integer(2)
+    scheduled_run_date_period: varchar(1)
+	
+    deals_scheduled_run_date: timestamp
+    deals_scheduled_run_date_year: integer(10)
+    deals_scheduled_run_date_month: integer(2)
+    deals_scheduled_run_date_day: integer(2)
+    deals_scheduled_run_date_period: varchar(1)
+    
+    salesperson_one_name: string(255)
+    salesperson_two_name: string(255)
+    
+    offer_all_cities_names: string(255)
+    offer_all_sites_names: string(255)
+    offer_all_domains_names: string(255)
+
+
+
+V_purchase_admin:
+  columns:
+    member_id: integer
+    offer_id: integer
+    quantity: integer
+    email: string(255)
+    transaction_status: integer
+    transaction_message: string(255)
+    transaction_id: string(255)
+    external_transaction_id: string(255)
+    payment_system: string(255)
+    refund_status: boolean
+    purchase_refund_status: boolean
+    use_credit: integer
+    total: float
+    alias: integer
+    use_shipping: float
+    shopping_cart_shipping: integer(10)
+    is_pss: boolean
+    shipping_refunded: float
+    use_shipping_id: integer(10)
+    shipping_address_id: integer(10)
+    multi_price_id: integer(10)
+    location_id: integer(10)
+    source_domain: string(255)
+    source_campaign: string(255)
+    offer_properties_values: string(255)
+    total_excluding_refunds: float
+    source_adgroup: string(255)
+    source_medium: string(255)
+    source_content: string(255)
+    source_landingpage: string(255)
+    subaffiliate_id: integer(11)
+    ruid: string(255)
+    new_member: integer(1)
+    my_campaigns_id: integer
+    share_x: float
+    gift: boolean
+    offer_multi_prices: boolean
+    price: integer
+    created_at: timestamp
+    updated_at: timestamp
+    offer_created_at: timestamp
+    vendor_id: integer
+    first_name: string(255)
+    last_name: string(255)
+    member_email: string(255)
+    ouffer_name: string(255)
+    city_id: integer
+    member_source_domain: string(255)
+    pss_selected_params: string(255)
+    pss_products_id: integer(11)
+    pss_stock_id: integer(11)
+#    pss_price: integer(11)
+    multi_price: integer(11)
+    vertical_site_id: integer(11)
+    domain: string(255)
+    domain_id: integer(11)
+  relations:
+    Offer:
+      local: offer_id
+      class: Offer
+
+
+V_voucher_admin:
+  columns:
+    id: integer(11)
+    amount: float
+    member_email: string(255)
+    member_id: integer(11)
+    amount_refunded: float
+    shipping_amount: float
+    shipping_refunded: float
+    hidden: boolean
+    purchase_has_shipping: boolean
+    purchase_gift: boolean
+    vendor_location_id: integer(11)
+    shipping: string(255)
+    billing: string(255)
+    email: string(255)
+    is_pss: boolean
+    part_num: integer(11)
+    gift_id: integer(11)
+    location_id: integer(11)
+    redemption_code: string(255)
+    purchase_refund_status: integer(11)
+    is_used: boolean
+    ouffer_name: string(255) 
+    offer_id: integer(11)
+    redeemed: boolean
+    purchase_id: integer(11)
+    transaction_status: integer(11)
+    transaction_message: string(255)  
+    card_number: string(255) 
+    first_name: string(255) 
+    last_name: string(255) 
+    shipping_address: string(255) 
+    shipping_address2: string(255)  
+    postal_code: string(255)  
+    city: string(255)  
+    phone: string(255) 
+    sample_sale_products_id: integer(11)
+    sample_sale_products_stock_id: integer(11)
+    domain: string(255)
+    domain_id: integer
+  relations:
+    Member:
+      local: member_id
+      class: Member
+
+V_gift_admin:
+  columns:
+    purchase_id: integer(20)
+    voucher_id: integer(20)
+    deal_id: integer(20)
+    member_id: integer(20)
+    email: string(255)
+    first_name: string(255)
+    last_name: string(255)
+    text: clob
+    messages: clob
+    theme: integer(20)
+    quantity: integer(20)
+    address: string(255)
+    address_optional: string(255)
+    city: string(255)
+    domain: string(255)
+    postal_code: integer(20)
+    country: string(255)
+    create_date: timestamp
+    update_date: timestamp
+    send: boolean
+    deleted: boolean
+    print: boolean
+    block_print: boolean
+    member_first_name: string(255)
+    member_last_name: string(255)
+    member_email: string(255)
+    offer_id: integer
+    
+Offer_cities:
+  columns:
+    offer_id: integer(10)
+    city_id: integer(10)
+    sub_city_id: integer(10)
+    
+OfferCredits:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(20)
+    offer_id: integer(20)
+    credit: float
+    chunk: float
+    deal_price_minimum: float
+    expire: timestamp
+    expire_in_days: boolean
+    expire_days: integer(6)
+  relations:
+    Offer:
+      local: offer_id
+      foreign: id
+      foreignAlias: OfferCredits
+
+Offer_shipping:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(11)
+    offer_id: integer(11)
+    price: integer(11)
+    cost_price: integer(11)
+    name: string(255)
+    position: integer(20)
+    deleted: boolean
+    
+  relations:
+    Offer:
+      local: offer_id
+      foreign: id
+      foreignAlias: OfferShipping  
+     
+RedemptionCodesScheduler:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(20)
+    status: integer(1)
+    task: string(20)
+    offer_id: integer(11)
+    author: string(256)
+    parameters: string(256)
+
+Polls:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(20)
+    member_id: integer(20)
+    offer_id: integer(20)
+    q1: integer(1)
+    q2: integer(1)
+    q2_comment: clob
+    q3: integer(1)
+    q4: integer(1)
+    q5: integer(1)
+    q5_comment: clob
+    q6: integer(1)
+    q7: integer(1)
+    q8: integer(1)
+    q9: integer(1)
+    q10: integer(1)
+    q10_comment: clob
+    q11: integer(1)
+    q11_comment: clob
+    q12: integer(1)
+    q12_comment: clob
+    q13: integer(1)
+    q13_comment: clob
+    q14: integer(1)
+    q15: integer(1)
+    q16_comment: clob
+  relations:
+    Member:
+      local: member_id
+      class: Member
+    Offer:
+      local: offer_id
+      class: Offer
+
+VendorFeedback:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(20)
+    vendor_id: integer(20)
+    status: boolean
+    title_inaccuracies_short: string(50)
+    title_inaccuracies: clob
+    what_we_like_inaccuracies_short: string(50)
+    what_we_like_inaccuracies: clob
+    main_content_inaccuracies_short: string(50)
+    main_content_inaccuracies: clob
+    full_noted_short: string(50)
+    full_noted: clob
+    other_inaccuracies_short: string(50)
+    other_inaccuracies: clob
+  relations:
+    Offer:
+      local: offer_id
+      class: Offer
+    Vendor:
+      local: vendor_id
+      class: Vendor
+
+Matrix:
+  actAs: [ Timestampable ]
+  columns:
+    city_id: integer(20)
+    category_id: integer(20)
+    category_value: integer(20)
+    subcategory_id: integer(20)
+    subcategory_value: integer(20)
+    subcategory_type_id: integer(20)
+    subcategory_type_value: integer(20)
+    scheduled_run_date_year: integer(20)
+    scheduled_run_date_month: integer(20)
+         
+OfferMap:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: 
+      type: integer(20)
+      notnull: true
+    map: 
+      type: string(100)
+      notnull: true
+  relations:
+    Offer:
+      local: offer_id
+      class: Offer
+      type: one
+      foreignType: one
+  indexes:
+    name: { fields: [offer_id], type: unique }
+    
+MemberSettings:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer(20)
+    name: string(255)
+    settings: clob
+
+Htc:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer(20)
+    session_id: string(64)
+    count: integer(6)
+  relations:
+    Member:
+      local: member_id
+      class: Member
+
+V_purchase_htc:
+  columns:
+    id: integer
+    created_at: timestamp
+    total: float
+    refund_status: integer
+    htc_purchase_type: integer
+    htc_referrer: string(255)
+    net_revenue: float
+    commission: float
+    mobile: boolean
+    transaction_message: string(255)
+    
+Statuses:
+  actAs: [ Timestampable ]
+  columns:
+    type_id: integer(20)
+    status_id: integer(20)
+    position: integer(20)
+    name: string(255)
+    color: string(255)
+    const: string(255)
+    abbreviation: string(255)
+    default_status:
+      type: boolean
+      default: false
+    deal_scheduled:
+      type: boolean
+      default: false
+    cancelled:
+      type: boolean
+      default: false
+    next_id: integer(20)      
+
+SalespersonCommissions:
+  actAs: [ Timestampable ]
+  columns:
+    salesperson_id: integer(11)
+    commision_budget: integer(6)
+    overage: integer(6)
+    time: timestamp
+  relations:
+    Salesperson:
+      local: salesperson_id
+      class: Salesperson
+
+SalespersonReport:
+  actAs: [ Timestampable ]
+  columns:
+    salesperson_id: integer(20)
+    period: date
+    signed_contracts: integer(20)
+    approved_contracts: integer(20)
+    approved_contracts_from_new_vendors: integer(20)
+    total_sales: integer(20)
+    commission: integer(20)
+    commission_budget: integer(20)
+    adjusted_commission: integer(20)
+    earned_commission: integer(20)
+    contract_payout: integer(20)
+    shipping: integer(20)
+    domain_id: integer(9)
+  relations:
+    Salesperson:
+      local: salesperson_id
+      class: Salesperson
+    Domain:
+      local: domain_id
+      class: Domains
+      type: one
+
+	  
+SalespersonReportClone:
+  actAs: [ Timestampable ]
+  columns:
+    salesperson_id: integer(20)
+    period: date
+    signed_contracts: integer(20)
+    approved_contracts: integer(20)
+    approved_contracts_from_new_vendors: integer(20)
+    total_sales: integer(20)
+    commission: integer(20)
+    commission_budget: integer(20)
+    adjusted_commission: integer(20)
+    earned_commission: integer(20)
+    contract_payout: integer(20)
+    shipping: integer(20)
+    domain_id: integer(9)
+	  
+PaymentInvoice:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: 
+      type: integer(20)
+      notnull: true
+    template: string(100)
+    vendor_address: string(256)
+    voucher_price: 
+      type: clob
+      notnull: true
+    voucher_margin: 
+      type: clob
+      notnull: true
+    voucher_cost_price:
+      type: clob
+      notnull: true
+    voucher_shipping_cost_price:
+      type: clob
+      notnull: true
+    vouchers_bought:
+      type: clob
+      notnull: true
+    vouchers_redeemed:
+      type: clob
+      notnull: true
+    voucher_amount_refunded:
+      type: clob
+      notnull: true
+    offer_payment_percent:
+      type: float
+      notnull: true
+    offer_shipping_payment_percent:
+      type: integer
+      notnull: true
+    offer_is_gst_included:
+      type: boolean
+      notnull: true
+    offer_is_pss:
+      type: boolean
+      notnull: true
+    offer_has_shopping_cart_shipping:
+      type: boolean
+      notnull: true
+      default: false
+    offer_price_mode:
+      type: boolean
+      notnull: true
+      default: false
+    ikey:
+      type: string(50)
+      notnull: true
+    payment_id:
+      type: integer(20)
+      notnull: true
+    payment_date: date
+    payment_transfer_type: integer(4)
+    payment_identification_number: string(255)
+    payment_type: integer(4)
+    payment_percentage_of_shipping_paid: integer(6)
+    payment_domain: string(100)
+    previous_payments:
+      type: clob
+      notnull: true
+    is_generated: 
+      type: boolean
+      default: false
+    filename: string(100)
+  relations:
+    Offer:
+      local: offer_id
+      class: Offer
+    Payment:
+      local: payment_id
+      class: Payments
+  indexes:
+    name: { fields: [payment_id, domain], type: unique }
+    
+GiftCardsBatch:
+  actAs: [ Timestampable ]
+  columns:
+    name:
+      type: string(255)
+      notnull: true
+    codes_count:
+      type: integer(8)
+      notnull: true
+    credit: float
+    chunk: float
+    deal_price_minimum: float
+    start_at: timestamp
+    expire_at: timestamp
+  relations:
+    GiftCards:
+      foreign: batch_id
+      class: GiftCard
+
+GiftCard:
+  actAs: [ Timestampable ]
+  columns:
+    batch_id: integer(20)
+    member_id: integer(20)
+    code: string(32)
+    redeemed: boolean
+    disabled: boolean
+    credit: float
+    chunk: float
+    deal_price_minimum: float
+    start_at: timestamp
+    expire_at: timestamp
+  relations:
+    GiftCardsBatch:
+      local: batch_id
+      class: GiftCardsBatch
+
+SalespersonPayments:
+  actAs: [ Timestampable ]
+  columns:
+    salesperson_id: integer(20)
+    date: date
+    payment: integer(11)
+  relations:
+    Salesperson:
+      local: salesperson_id
+      class: Salesperson
+
+SampleSalePurchase:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(20)
+    purchase_id: integer(20)
+    sample_sale_products_id: integer(20)
+    sample_sale_products_stock_id: integer(20)
+    sample_sale_selected_params: string(255)     
+  relations:
+    Product:
+      class: SampleSaleProducts
+      local: sample_sale_products_id
+      foreign: id
+    Stock:
+      class: SampleSaleProductsStock
+      local: sample_sale_products_stock_id
+      foreign: id    
+      
+SampleSaleCategory:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(20)
+    name: string(255)
+  relations:
+    Params:
+      class: SampleSaleCategoryParams
+      local: id
+      foreign: sample_sale_category_id
+      type: many
+    
+      
+SampleSaleCategoryParams:
+  actAs: [ Timestampable ]
+  columns:
+    sample_sale_category_id: integer(20)
+    name: string(255)
+  relations:
+    Values:
+      class: SampleSaleCategoryParamsValue
+      local: id
+      foreign: sample_sale_category_params_id
+      type: many  
+           
+    
+SampleSaleCategoryParamsValue:
+  actAs: [ Timestampable ]
+  columns:
+    sample_sale_category_params_id: integer(20)
+    value: string(255)  
+    
+    
+SampleSaleProducts:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(20)
+    sample_sale_category_id: integer(20)
+    name: string(255)  
+    slug: string(255)
+    value: integer(20) 
+    price: integer(20)
+    cost_price: integer(20) 
+    ouffer_margin: integer(20) 
+    main_image_id: integer(20) 
+    sku_number: string(255)
+    import_id: integer(20) 
+    weight: integer(20)
+    summary: clob
+    details: clob
+    multi_prices_mode: 
+      type: boolean
+      default: false
+    param_id_for_change_image: integer(11)
+    bought: integer(20)
+    vouchers_refunded: integer(20)
+    vouchers_consumed: integer(20)
+    revenue_sold: integer(20)
+    revenue_refunded: integer(20)
+    sum_credit: integer(20)
+    members_bought: integer(20)
+    view_count: integer(11)
+    rate: float
+  relations:
+    Category:
+      class: SampleSaleCategory
+      local: sample_sale_category_id
+      foreign: id
+    Files:
+      class: SampleSaleProductsFiles
+      local: id
+      foreign: sample_sale_products_id  
+      type: many
+    MainFile:
+      class: SampleSaleProductsFiles
+      local: main_image_id
+      foreign: id  
+    Specs:
+      class: SampleSaleProductsSpecs
+      local: id
+      foreign: sample_sale_products_id  
+      type: many
+    Shipping:
+      class: SampleSaleProductsShipping
+      local: id
+      foreign: sample_sale_products_id  
+      type: many 
+    Stock:
+      class: SampleSaleProductsStock
+      local: id
+      foreign: sample_sale_products_id  
+      type: many   
+    ShippingItem:
+      class: SampleSaleShipping
+      local: id
+      foreign: sample_sale_products_id  
+      type: one
+
+SampleSaleProductsParamsImages:
+  actAs: [ Timestampable ]
+  columns:
+    sample_sale_products_id: integer(20)
+    value_id: string(255)
+    image: string(40)
+  relations:
+    SampleSaleProducts:
+      local: sample_sale_products_id
+      foreign: id
+      foreignAlias: SampleSaleProductsParamsImages
+    SampleSaleCategoryParamsValue:
+      local: value_id
+      foreign: id
+      foreignAlias: SampleSaleProductsParamsImages
+
+SampleSaleProductsFiles:
+  actAs: [ Timestampable ]
+  columns:
+    sample_sale_products_id: integer(20)
+    name: string(255) 
+    
+    
+SampleSaleProductsSpecs:
+  actAs: [ Timestampable ]
+  columns:
+    sample_sale_products_id: integer(20)
+    name: string(255)
+    value: string(255)   
+    
+    
+SampleSaleProductsShipping:
+  actAs: [ Timestampable ]
+  columns:
+    sample_sale_products_id: integer(20)
+    name: string(255)
+    value: string(255)          
+
+    
+SampleSaleProductsStock:
+  actAs: [ Timestampable ]
+  columns:
+    sample_sale_products_id: integer(20)
+    multi_price_id: integer(20)
+    quantity: integer(20) 
+    limit_by_user: integer(20)
+    sku_number: string(255)
+    sold: integer(20)
+    import_key: string(255)
+    reserved_count: integer
+  relations:
+    Params:
+      class: SampleSaleProductsStockParams
+      local: id
+      foreign: sample_sale_products_stock_id
+      type: many
+    MultiPrice:
+      class: Offer_multi_prices
+      local: multi_price_id
+      foreign: id
+      type: one
+      
+      
+SampleSaleProductsStockParams:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(20) 
+    sample_sale_products_stock_id: integer(20)
+    sample_sale_products_id: integer(20)
+    sample_sale_category_id: integer(20)
+    sample_sale_category_params_id: integer(20) 
+    sample_sale_category_params_value_id: integer(20) 
+  relations:
+    Value:
+      class: SampleSaleCategoryParamsValue
+      local: sample_sale_category_params_value_id
+    Name:
+      class: SampleSaleCategoryParams
+      local: sample_sale_category_params_id  
+      
+      
+SampleSaleShipping:
+  actAs: [ Timestampable ]
+  columns:
+    sample_sale_products_id: integer(20)
+    shipping_type: integer(1) 
+    has_shipping: 
+       type: boolean
+       default: false
+    has_get_deal_shipping: 
+       type: boolean
+       default: true   
+    third_party_delivery: 
+       type: boolean
+       default: false
+    has_shopping_cart_shipping: 
+       type: boolean
+       default: false
+    shipping_grids_id: integer(11)   
+  relations:
+     Items:
+       class: SampleSaleShippingItems
+       local: sample_sale_products_id
+       foreign: sample_sale_products_id
+       type: many
+     ShippingGrids: ~
+       
+       
+SampleSaleShippingItems:
+  actAs: [ Timestampable ]
+  columns:
+    sample_sale_products_id: integer(20)
+    price: integer(20) 
+    cost_price: integer(20) 
+    name: string(255)   
+    position: integer(20)
+    deleted: boolean
+      
+    
+OfferAllCities:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(20)
+    names: string(255)
+    
+OfferAllCategories:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(20)
+    names: string(255)
+    
+OfferAllSites:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(20)
+    names: string(255) 
+    
+OfferAllDomains:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(20)
+    names: string(255)            
+
+Referrals:
+  actAs: [ Timestampable ]
+  columns:
+    email: string(255)
+    member_id: integer(20)
+    referrer_id: integer(20)
+  relations:
+    Referrer: 
+      class: Member
+      local: referrer_id
+    Member: 
+      class: Member
+      local: member_id
+    ReferrerRole:
+      class: MemberReferrerRole
+      local: referrer_id
+      foreign: member_id  
+      type: one
+
+MemberReferrerRole:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer(20)
+    role: integer(6)
+    closed_banner: boolean
+  relations:
+    Referrer: 
+      class: Member
+      local: member_id
+
+Membership:
+  actAs: [ Timestampable ]
+  columns:
+    email: string
+    password: string
+    inviter_id: integer
+    queue_id: integer
+    is_validated: 
+        type: boolean
+        default: false
+    is_access_granted: 
+      type: boolean
+      default: false
+    discount_status: integer(1)
+  indexes:
+    name: { fields: [email], type: unique }
+
+GiftCardBuy:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer(20)
+    gift_card_id: integer(20)
+    billing_id: integer(20)
+    theme: integer(3)
+    amount: integer(20)
+    name_of_recipient: string(255)
+    email: string(255)
+    on_behalf_of: string(255)
+    code: string(32)
+    address_one: string(255)
+    address_two: string(255)
+    city: string(255)
+    zip: integer(20)
+    message: string(175)
+    details: clob 
+    status: integer(2)
+    type: string(100)
+    transaction_id: integer(20)
+    payment_system: string(255)
+    external_transaction_id: string(255)
+    domain: string(255)
+    subdomain: string(255)
+    config_id: integer(10)
+  relations:
+    Member:
+      local: member_id
+      class: Member
+    Member_billing:
+      local: billing_id
+      class: Member_billing 
+    GiftCard:
+      local: gift_card_id
+      class: GiftCard 
+    Config:
+      class: Configs
+      local: config_id
+      type: one      
+      
+StaticPages:
+  actAs: [ Timestampable ]
+  columns:
+     title: string(255)
+     slug: string(255)
+     hide_sidebar: boolean
+     body: clob
+     right_sidebar: clob
+     deleted: 
+       type: boolean
+       default: false
+  relations:
+     Brands:
+       class: Domains
+       refClass: StaticPagesBrand
+       local: page_id
+       foreign: domain_id   
+        
+       
+StaticPagesBrand:
+  actAs: [ Timestampable ]
+  columns:
+     page_id: integer(11)
+     domain_id: integer(11)
+  relations:
+    Domain:
+      class: Domains
+      local: domain_id
+      type: one
+    Page:
+      class: StaticPages
+      local: page_id
+      type: one
+            
+
+Mass_refund_queue:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(11)
+    status: integer(11)
+    refund_vouchers: boolean
+    refund_shipping: boolean
+    refund_in_credit: boolean
+    is_manual_refund: boolean
+    remove_from_user_account: boolean
+    only_non_redeemed_vouchers: boolean
+    comment: clob
+    result: clob
+    finished_date: datetime
+    email: string(255)
+    report_link: string(255)
+    is_customer: boolean
+    is_merchant: boolean
+    purchase_ids: clob
+
+HelpObjects:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(11)
+    domain_id: integer(11)
+    name: string(255)
+    text: clob
+
+Sitemap:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(11)
+    url: string(255)
+    path_only: boolean
+    last_mod: timestamp
+    last_mod_date_only: boolean
+    changefreq: integer(3)
+    priority: string(3)
+
+    
+ShoppingCartShipping:
+  actAs: [ Timestampable ]
+  columns:
+    price: integer(20) 
+    price_from: integer(20) 
+    deleted: boolean
+
+ShippingGrids:
+  actAs: [ Timestampable ]
+  columns:
+    name: string(255)
+    type: integer(4)
+  relations:
+    Ranges:
+      class: ShippingGridsRanges
+      local: id
+      foreign: shipping_grids_id
+      type: many
+      onDelete: CASCADE
+
+ShippingGridsRanges:
+  columns:
+    shipping_grids_id: integer(11)
+    price_from: integer(11)
+    price: integer(11)
+    cost_price: integer(11)
+  relations:
+    ShippingGrids: ~
+
+VerticalSites:
+  actAs: [ Timestampable ]
+  columns:
+    name: string(255) 
+    title: string(255) 
+    domain: string(255) 
+    mailing_list_id: integer
+    has_cities: boolean
+    shipping_default_on: 
+       type: boolean
+       default: false
+    payment_delay: integer(6)
+
+
+VerticalSitesOffer:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(20)
+    contract_id: integer(20)
+    vertical_site_id: integer(20)
+    action: integer(1)
+  relations:
+    Site:
+      class: VerticalSites
+      local: vertical_site_id
+      type: one
+      onDelete: CASCADE
+    Offer:
+      local: offer_id
+      class: Offer
+      
+VerticalSitesOfferCategory:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(20)
+    contract_id: integer(20)
+    vertical_site_id: integer(20)
+    category_id: integer(20)
+    level: integer(20)
+  relations:
+    Site:
+      class: VerticalSites
+      local: vertical_site_id
+      type: one
+      onDelete: CASCADE
+    Category:
+      class: Category
+      local: category_id
+      type: one
+      onDelete: CASCADE        
+
+FacebookOpengraph:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer(20)
+    offer_id: integer(11)
+    action: integer(4)
+  relations:
+    Member: ~
+    Offer: ~
+
+MailingList:
+  actAs: [ Timestampable ]
+  columns:
+    name: 
+      type: string(100)
+      notnull: true
+  indexes:
+    name: { fields: [name], type: unique }
+
+Ads:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(20)
+  relations:
+    Offer: ~
+
+AdsCodeArt:
+  actAs: [ Timestampable ]
+  columns:
+    code_art: string(30)
+    offer_id: integer(20)
+    offer_properties: string(255)
+    multi_price_id: integer(20)
+    sample_sale_product_id: integer(20)
+  relations:
+    Offer: ~
+
+AdsStocks:
+  actAs: [ Timestampable ]
+  columns:
+    code_art_id: integer(20)
+    offer_id: integer(20)
+    qte: integer(11)
+  relations:
+    Offer: ~
+    CodeArt:
+      class: AdsCodeArt
+      local: code_art_id
+      type: one
+      foreignType: one
+      onDelete: CASCADE
+
+AdsExpedition:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(20)
+    purchase_id: integer(20)
+    status: string(1)
+    type: integer(4)
+    tracking_number: string(30)
+    date_exped: date
+  relations:
+    Offer: ~
+    Purchase: ~
+
+OfferAdsParams:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(20)
+    contract_id: integer(20)
+    enable_ads_export:
+      type: boolean
+      default: false
+    type_envoi: integer(6)
+  relations:
+    Offer:
+      local: offer_id
+      class: Offer
+      type: one
+      foreignType: one
+      onDelete: CASCADE
+    Contract:
+      class: Contract
+      local: contract_id
+      type: one
+      foreignType: one
+      onDelete: CASCADE
+
+AdsShippingReport:
+  tableName: v_ads_shipping_report
+  columns:
+    offer_id: integer(20)
+    vendor_id: integer(11)
+    p_received: float
+    p_sent: float
+    sent_date: timestamp
+    received_date: timestamp
+  relations:
+    Offer: ~
+
+AdsOrderReport:
+  tableName: v_ads_order_report
+  columns:
+    order_id: integer(20)
+    email: string(255)
+    full_name: string(255)
+    address: clob
+    status: string(1)
+    tracking_number: string(30)
+    date_exped: timestamp
+
+OfferProductInfo:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(20)
+    product_id: integer(20)
+    multi_price_id: integer(20)
+    contract_id: integer(20)
+    weight: integer(11)
+    length: integer(11)
+    width: integer(11)
+    height: integer(11)
+  relations:
+    Offer:
+      local: offer_id
+      class: Offer
+      type: one
+      foreignType: one
+    SampleSaleProducts:
+      class: SampleSaleProducts
+      local: product_id
+      type: one
+      foreignType: one
+    Offer_multi_prices:
+      class: Offer_multi_prices
+      local: multi_price_id
+      type: one
+      foreignType: one
+    Contract:
+      class: Contract
+      local: contract_id
+      type: one
+      foreignType: one
+
+
+OfferComment:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(10)
+    is_enable:
+      type: boolean
+      default: false
+    name: string(255)
+    title: string(255)
+    body: string(500)
+    image: string(255)
+ 
+
+Templates:
+  actAs: [ Timestampable ]
+  columns:
+    name: string(255) 
+    css: string(255) 
+    css_subscription: string(255) 
+    js: string(255) 
+    favicon: string(255) 
+    images: clob
+
+
+DomainsBlackList:
+  actAs: [ Timestampable ]
+  columns:
+    domain: string(50)
+
+PromoCodeWesternDigital:
+  columns:
+    promo_code: string(20)
+    member_id: integer(20)
+  relations:
+    Member:
+      class: Member
+      local: member_id
+      type: one
+      foreignType: one
+
+DataExtensionsStorage:
+  actAs: [ Timestampable ]
+  columns:
+    data_extension_id: string(100)
+    key: string(100)
+    name: string(100)
+    is_sendable: 
+      type: boolean
+      default: true
+  indexes:
+    key: { fields: [ key ], type: unique }
+    
+MembersQueue:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer(20)
+    member_smartbox_id: integer(20)
+    email: string(255)
+    firstname: string(255)
+    lastname: string(255)
+    new_email: string(255)
+    role: string(255)
+    origin: string(50)
+    activated: boolean
+    imported_at: timestamp
+    subscriptions: clob
+    action: string(30)
+    status: integer(1)
+
+MembersQueueOperatorStatus:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(20)
+    member_queue_id: integer(20)
+    operator: string(255)
+    queue_status: integer(1)
+
+
+DealFilters:
+  actAs: [ Timestampable ]
+  columns:
+    id: integer(11)
+    member_id: integer (11)
+    name: string(255)
+    uri: string(255)
+
+FacebookShare:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer(20)
+    allow: boolean
+    asked: boolean
+  relations:
+    Member:
+      class: Member
+      local: member_id
+      type: one
+      foreignType: one
+
+OfferView:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: integer(20)
+    product_id: integer(20)
+    member_id: integer(20)
+    fb_id: integer(20)
+  relations:
+    Offer:
+      local: offer_id
+      class: Offer
+      type: one
+      foreignType: one
+    Member:
+      class: Member
+      local: member_id
+      type: one
+      foreignType: one
+
+ReferralsCreditPending:
+  actAs: [ Timestampable ]
+  columns:
+    member_id: integer(20)
+    get_role: integer(4)
+    status:
+      type: integer(1)
+      notnull: true
+  relations:
+    Member:
+      class: Member
+      local: member_id
+      type: one
+      foreignType: one
+
+MemberSmartbox:
+  actAs: [ Timestampable ]
+  columns:
+    hash: string(32)
+    email: string(255)
+    password: string(255)
+    first_name: string(255)
+    last_name: string(255)
+    street_address: string(255)
+    street_address2: string(255)
+    city: string(50)
+    postcode: integer(11)
+    country: string(50)
+    date_of_birth: timestamp
+  relations:
+    Member:
+      class: Member
+      local: id
+      foreign: member_smartbox_id
+      type: one
+      foreignType: one
+
+AdsLog:
+  actAs: [ Timestampable ]
+  columns:
+    text: string(255)
+    
+Configs:
+  actAs: [ Timestampable ]
+  columns:
+    name: string(255)
+    file_name: string(255)
+    old_file_name: string(255)
+    configs: clob
+    
+Domains:
+  actAs: [ Timestampable ]  
+  columns:
+    name: string(255)
+    domain: string(255)
+    session_domain: string(255)
+    title: string(255)
+    dev_key: string(255)
+    urls_no_redirect: clob
+    urls_redirect: clob
+    config_id: integer(11)
+    dev_config_id: integer(11)
+    template_id: integer(11)
+    vocabulary_id: integer(11)
+    sender_profile_id: integer
+    vertical_behavior: integer(1)
+    add_prefix_www: 
+      type: boolean
+      default: false
+    link_top_domain:
+      type: boolean
+      default: false  
+    separate_shopping_cart: 
+      type: boolean
+      default: false  
+    split_session: 
+      type: boolean
+      default: false  
+    redirect_prefix_www: 
+      type: boolean
+      default: false   
+    disable_ssl: 
+      type: boolean
+      default: false      
+  relations:
+    Verticals:
+      class: DomainVerticals
+      local: id
+      foreign: domain_id   
+      type: many
+    Template:
+      class: Templates
+      local: template_id
+      foreign: id   
+      type: one 
+    Vocabulary:
+      class: Vocabularies
+      local: vocabulary_id
+      foreign: id   
+      type: one  
+    Config:
+      class: Configs
+      local: config_id
+      foreign: id   
+      type: one  
+    ConfigDev:
+      class: Configs
+      local: dev_config_id
+      foreign: id   
+      type: one       
+    SenderProfile:
+      class: SenderProfile
+      local: sender_profile_id
+      foreign: id   
+      type: one
+    Purchases:
+      class: Domains
+      refClass: DomainPurchases
+      local: domain_id
+      foreign: parent_id
+    Authentication:
+      class: Domains
+      refClass: DomainAuthentication
+      local: domain_id
+      foreign: parent_id
+    DomainCompanyInfo:
+      class: DomainCompanyInfo
+      local: id
+      foreign: domain_id
+      type: one
+    Files:
+      class: DomainFiles
+      local: id
+      foreign: domain_id   
+      type: many     
+      
+DomainFiles:
+  actAs: [ Timestampable ]
+  columns:
+     domain_id: integer(11)
+     name: string(255)
+     file: string(255)
+  relations:
+    Domain:
+      class: Domains
+      local: domain_id
+      type: one            
+        
+DomainPurchases:
+  actAs: [ Timestampable ]
+  columns:
+     domain_id: integer(11)
+     parent_id: integer(11)
+  relations:
+    Domain:
+      class: Domains
+      local: domain_id
+      type: one
+    Parent:
+      class: Domains
+      local: parent_id
+      type: one  
+      
+DomainAuthentication:
+  actAs: [ Timestampable ]
+  columns:
+     domain_id: integer(11)
+     parent_id: integer(11)
+  relations:
+    Domain:
+      class: Domains
+      local: domain_id
+      type: one
+    Parent:
+      class: Domains
+      local: parent_id
+      type: one        
+      
+DomainVerticals:
+  actAs: [ Timestampable ]  
+  columns:
+    domain_id: integer(11)
+    vertical_id: integer(11)
+    config_id: integer(11)
+    template_id: integer(11)
+    vocabulary_id: integer(11)
+    sender_profile_id: integer
+    mailing_list_id: integer
+    is_default: 
+       type: boolean
+       default: false
+    is_mobile_default: 
+       type: boolean
+       default: false   
+    name: string(255)
+    title: string(255)
+    subdomain: string(255)
+    domain: string(255)
+    deal_logo: string(255)   
+    deal_logo_text: string(500)   
+    subscription_picture_light: string(255)   
+    subscription_picture_dark: string(255)   
+    icon: string(255)
+    mobile_logo: string(255)
+    has_cities: 
+       type: boolean
+       default: false
+    is_prioritized:
+       type: boolean
+       default: false
+    is_standalone:
+       type: boolean
+       default: false
+    member_only: 
+       type: boolean
+       default: false
+    no_index: integer(1)
+    url_referer: string(255)
+    url_redirect: string(255)
+    discount: integer(10)
+    referal_amount: integer(10)
+    source_domain: string(255)
+    tsp_on:
+      type: boolean
+      default: false
+    promo_code_enabled:
+      type: boolean
+      default: false  
+    confirmation_email:
+      type: boolean
+      default: false   
+  relations:
+    Vertical:
+      class: VerticalSites
+      local: vertical_id
+      type: one
+    Domain:
+      class: Domains
+      local: domain_id
+      type: one
+    Template:
+      class: Templates
+      local: template_id
+      foreign: id   
+      type: one 
+    Vocabulary:
+      class: Vocabularies
+      local: vocabulary_id
+      foreign: id   
+      type: one  
+    SenderProfile:
+      class: SenderProfile
+      local: sender_profile_id
+      foreign: id   
+      type: one
+    MailingList:
+      class: MailingList
+      local: mailing_list_id
+      foreign: id   
+      type: one
+    Config:
+      class: Configs
+      local: config_id
+      foreign: id   
+      type: one 
+    Order:
+      class: DomainVerticalsOrder
+      local: id
+      foreign: domain_vertical_id   
+      type: many         
+
+DomainVerticalsOrder:
+  actAs: [ Timestampable ]  
+  columns:
+    domain_vertical_id: integer(11)
+    domain_id: integer(11)
+    vertical_id: integer(11)
+    is_hidden: 
+       type: boolean
+       default: false
+    weight: integer(11)
+  relations:
+    Vertical:
+      class: VerticalSites
+      local: vertical_id
+      type: one
+    Domain:
+      class: Domains
+      local: domain_id
+      type: one
+    DomainVertical:
+      class: DomainVerticals
+      local: domain_vertical_id
+      type: one    
+
+      
+Vocabularies:
+  actAs: [ Timestampable ]  
+  columns:
+    name: string(255)
+    vocabulary: string(255)
+    vocabulary_upload: string(255)
+    is_upload:
+      type: boolean
+      default: false
+    
+    
+DomainOffers:
+  actAs: [ Timestampable ]  
+  columns:
+    domain_id: integer(11)
+    offer_id: integer(11)
+    contract_id: integer(11)
+  relations:
+    Domain:
+      class: Domains
+      local: domain_id
+      type: one
+    Offer:
+      class: Offer
+      local: offer_id
+      type: one
+    Contract:
+      class: Contract
+      local: contract_id
+      type: one  
+      
+      
+DailyReport:
+  actAs: [ Timestampable ]  
+  columns:
+    file: string(255)
+    status: 
+       type: boolean
+       default: false
+
+DailyReportEmail:
+  actAs: [ Timestampable ]  
+  columns:
+    email: string(255)    
+
+SenderProfile:
+  actAs: [ Timestampable ]
+  columns:
+    name: string(100)
+    email: string(255)
+    reply_to: string(255)
+    business_unit: string(50)
+    forward_to_name: string(100)
+    forward_to_email: string(255)
+    external_sender_profile_id: string(255)
+    
+Offer_images:
+  actAs: [ Timestampable ]  
+  columns:
+    offer_id: int(11)
+    field_name: varchar(255)
+    image: varchar(255)
+    file_extension: varchar(5)
+    file_path: varchar(255)
+    domain_id: int(11)
+  relations:
+    Offer:
+      local: offer_id
+      class: Offer
+      #orderBy: id
+
+DomainCompanyInfo:
+  actAs: [ Timestampable ]  
+  columns:
+    domain_id: integer(11)
+    name: string(255)
+    address: text
+    email: string(50)
+    phone: string(30)
+    abn: string(30)
+  relations:
+    Domain:
+      local: domain_id
+      class: Domains
+      type: one
+
+DomainTrackingCodes:
+  actAs: [ Timestampable ]  
+  columns:
+    domain_id: integer(11)
+    name: string(255)
+    code: text
+  relations:
+    Domain:
+      local: domain_id
+      class: Domains
+      type: one
+
+DealsPurchase:
+  columns:
+    purchase_id: integer(10)
+    deals_member_id: integer(11)
+    member_id: integer(11)
+    email: varchar(255)
+    preauth_transaction_id: varchar(255)
+    quantity: integer(11)
+    total_price: integer(10)
+    use_credit: integer(10)
+    title: string(500)
+    voucher_title: string(500)
+    conditions: string(500)
+    instructions: string(500)
+    purchase_date: timestamp
+    img: varchar(255)
+
+DealsPurchasePart:
+  columns:
+    id: integer(10)
+    purchase_id: inintegert(10)
+    voucher_number: integer(20)
+    voucher_string: varchar(255)
+    voucher_name: varchar(255)
+    is_used: boolean
+    use_credit_amount: integer(20)
+    take_entirely_from_holdback: boolean
+    is_additional: boolean
+    is_full_refunded: boolean
+    date_redeemed: varchar(255)
+    voucher_value: integer(20)
+    voucher_price: integer(20)
+    is_gift: boolean
+    address: string(500)
+    adress_free: string(500)
+    redeemable_date: timestamp
+    expiry_date: timestamp
+  relations:
+    DealsPurchase:
+      local: purchase_id
+      class: DealsPurchase
+      type: many
+
+ThehomePurchase:
+  columns:
+    id: integer(10)
+    member_id: integer(11)
+    orderid: integer(11)
+    userid: integer(11)
+    total: float
+    subtotal: float
+    shipping: varchar(255)
+    shipping_cost: float
+    tax: float
+    date: integer(10)
+    descr: clob
+    price: float
+    product: varchar(255)
+
+PaymentScheme:
+  actAs: [ Timestampable ]  
+  columns:
+    name: string(255)
+    type: integer(4)
+    already_paid_type: integer(4)
+    is_one_time:
+      type: boolean
+      default: false
+    simple_invoice_enabled: 
+      type: boolean
+      default: false
+    purchase_order_enabled:
+      type: boolean
+      default: false
+    remittance_enabled:
+      type: boolean
+      default: false
+    remittance_mode: integer(1)
+  relations:
+    Items:
+      class: PaymentSchemeItems
+      local: id
+      foreign: payment_scheme_id
+      type: many
+      onDelete: CASCADE
+
+PaymentSchemeItems:
+  actAs: [ Timestampable ]  
+  columns:
+    payment_scheme_id: integer(11)
+    name: string(255)
+    type: integer(6)
+    calculation_type: integer(6)
+    days: integer(6)
+    size: integer(6)
+    mode: integer(1)
+    redemption_percentage: integer(6)
+    shipping_percentage: integer(6)
+    custom_type: integer(4)
+    is_remaining:
+      type: boolean
+      default: false
+  relations:
+    PaymentScheme: ~
+
+PaymentSchemeStatus:
+  actAs: [ Timestampable ]  
+  columns:
+    offer_id: integer(11)
+    payment_scheme_items_id: integer(11)
+    completed: boolean
+  relations:
+    Offer: ~
+    PaymentSchemeItems: ~
+    Invoices:
+      local: id
+      foreign: payment_scheme_status_id
+      class: Invoice
+      type: many
+
+OfferStatus:
+  actAs: [ Timestampable ]  
+  columns:
+    offer_id: integer(11)
+    redemption_percentage: integer(4)
+    redemption_date: timestamp
+    shipping_confirmed: boolean
+    shipping_confirmation_date: timestamp
+    delivery_confirmed: boolean
+    delivery_confirmation_date: timestamp
+  relations:
+    Offer: ~
+
+CampaignQueue:
+  actAs: [ Timestampable ]  
+  columns:
+    campaign_id: integer
+    status: integer(1)
+    settings: clob
+  relations:
+    Campaign: ~
+
+Invoice:
+  actAs: [ Timestampable ]
+  columns:
+    offer_id: 
+      type: integer(20)
+      notnull: true
+    domain_id: integer(11)
+    domain: string(50)
+    payment_scheme_items_id: integer(11)
+    payment_scheme_status_id: integer(11)
+    voucher_price: clob
+    vouchers_bought: clob
+    vouchers_consumed: clob
+    voucher_margin: clob
+    voucher_name: clob
+    voucher_cost_price: clob
+    voucher_amount_refunded: clob
+    voucher_shipping_cost_price: clob
+    voucher_sku_number: clob
+    previous_payments: clob
+    parameters: clob
+    amount: integer(11)
+    total: integer(11)
+    total_sales: integer(11)
+    commission: integer(11)
+    is_generated: 
+      type: boolean
+      default: false
+    filename: string(255)
+    send_confirmed:
+      type: boolean
+      default: false
+    sent:
+      type: boolean
+      default: false
+  relations:
+    Offer:
+      local: offer_id
+      class: Offer
+      foreignAlias: Invoices
+    PaymentSchemeItems: ~
+    PaymentSchemeStatus: ~
+    Domain:
+      local: domain_id
+      class: Domains
+      type: one
+    Payments:
+      class: Payments
+      local: id
+      foreign: invoice_id
+      type: one
+
+PaymentOutstandingReport:
+  actAs: [ Timestampable ]  
+  columns:
+    file: string(255)
+    status: 
+       type: boolean
+       default: false
+    start_date: datetime
+    end_date: datetime
+    type: int(1)
+
+PaymentOutstandingReportEmail:
+  actAs: [ Timestampable ]  
+  columns:
+    email: string(255)  
+
+InvoiceReport:
+  actAs: [ Timestampable ]
+  tableName: v_invoice_report
+  columns:
+    offer_id: integer(11)
+    ouffer_name: string(255)
+    vendor_id: integer(11)
+    
+    type: integer(6)
+    calculation_type: integer(6)
+    days: integer(6)
+    size: integer(6)
+    mode: integer(1)
+    redemption_percentage: integer(6)
+    shipping_percentage: integer(6)
+    is_remaining:
+      type: boolean
+      default: false
+    payment: string(255)  
+    bank_info_ouffer: string(255)  
+    bank_info_lookingo: string(255)  
+    remaining_liability: integer(11)
+    
+    vendor_name: string(255)
+    beneficiary_name: string(255)
+    bank_code: string(255)
+    bsb: string(255)
+    account_number: string(255)
+    sort_code: string(255)
+    rib_key: string(255)
+    domicile: string(255)
+    routing: string(255)
+    abn: string(255)
+    iban: string(255)
+    swift: string(255)
+    branch_code: string(255)
+    payment_scheme_items_id: integer(11)
+    date: timestamp
+    amount: integer(11)
+    total_sales: integer(11)
+    commission: integer(11)
+    invoice_ids: string(255)
+    invoice_filenames: string(255)
+    invoice_domains: string(255)
+    invoice_created_ats: string(255)
+    revenue_after_refunds: integer(20)
+    taxable_commission: integer(11)
+  relations:
+    Offer:
+      class: Offer
+      local: offer_id
+      foreign: id
+      type: one
+    Vendor: ~
+    PaymentSchemeItems: ~
+	
+InvoiceReportGenerated:
+  tableName: invoice_report_generated
+  columns:
+    id: integer(11)
+    offer_id: integer(11)
+    ouffer_name: string(255)
+    vendor_id: integer(11)
+    
+    type: integer(6)
+    calculation_type: integer(6)
+    days: integer(6)
+    size: integer(6)
+    mode: integer(1)
+    redemption_percentage: integer(6)
+    shipping_percentage: integer(6)
+    is_remaining:
+      type: boolean
+      default: false
+    payment: string(255)  
+    bank_info_ouffer: string(255)  
+    bank_info_lookingo: string(255)  
+    remaining_liability: integer(11)
+    
+    vendor_name: string(255)
+    beneficiary_name: string(255)
+    bank_code: string(255)
+    bsb: string(255)
+    account_number: string(255)
+    sort_code: string(255)
+    rib_key: string(255)
+    domicile: string(255)
+    routing: string(255)
+    abn: string(255)
+    iban: string(255)
+    swift: string(255)
+    branch_code: string(255)
+    payment_scheme_items_id: integer(11)
+    date: timestamp
+    amount: integer(11)
+    total_sales: integer(11)
+    commission: integer(11)
+    invoice_ids: string(255)
+    invoice_filenames: string(255)
+    invoice_domains: string(255)
+    invoice_created_ats: string(255)
+    revenue_after_refunds: integer(20)
+    taxable_commission: integer(11)
+  relations:
+    Offer:
+      class: Offer
+      local: offer_id
+      foreign: id
+      type: one
+    Vendor: ~
+    PaymentSchemeItems: ~
+	
+InvoiceReportGeneratedClone:
+  tableName: invoice_report_generated_clone
+  columns:
+    id: integer(11)
+    offer_id: integer(11)
+    ouffer_name: string(255)
+    vendor_id: integer(11)
+    
+    type: integer(6)
+    calculation_type: integer(6)
+    days: integer(6)
+    size: integer(6)
+    mode: integer(1)
+    redemption_percentage: integer(6)
+    shipping_percentage: integer(6)
+    is_remaining:
+      type: boolean
+      default: false
+    payment: string(255)  
+    bank_info_ouffer: string(255)  
+    bank_info_lookingo: string(255)  
+    remaining_liability: integer(11)
+    
+    vendor_name: string(255)
+    beneficiary_name: string(255)
+    bank_code: string(255)
+    bsb: string(255)
+    account_number: string(255)
+    sort_code: string(255)
+    rib_key: string(255)
+    domicile: string(255)
+    routing: string(255)
+    abn: string(255)
+    iban: string(255)
+    swift: string(255)
+    branch_code: string(255)
+    payment_scheme_items_id: integer(11)
+    date: timestamp
+    amount: integer(11)
+    total_sales: integer(11)
+    commission: integer(11)
+    invoice_ids: string(255)
+    invoice_filenames: string(255)
+    invoice_domains: string(255)
+    invoice_created_ats: string(255)
+    revenue_after_refunds: integer(20)
+    taxable_commission: integer(11)
+  relations:
+    Offer:
+      class: Offer
+      local: offer_id
+      foreign: id
+      type: one
+    Vendor: ~
+    PaymentSchemeItems: ~
+    
+InvoiceReportDownload:
+  actAs: [ Timestampable ]
+  columns:
+    emails: clob
+    query: clob
+    params: clob
+    invoice_files: clob
+    status: integer(1)
+    filename: string(255)
+
+MemberCreditsBrand:
+  actAs: [ Timestampable ]
+  columns:
+     member_credits_id: integer(20)
+     domain_id: integer(11)
+  relations:
+    Domain:
+      class: Domains
+      local: domain_id
+      type: one
+    MemberCredits:
+      class: MemberCredits
+      local: member_credits_id
+      type: one
+
+IncentiveCredits:
+  actAs: [ Timestampable ]
+  columns:
+     domain_id: integer(6)
+     credit: integer(11)
+     chunk: integer(11)
+     deal_price_minimum: integer(11)
+     expire: integer(6)
+     expire_at: timestamp
+     start_date: timestamp
+     end_date: timestamp
+  relations:
+    Domain:
+      class: Domains
+      local: domain_id
+      type: one
+
+CampaignMembersLog:
+  actAs: [ Timestampable ]
+  columns:
+     member_id: integer
+     campaign_id: integer
+     campaign_type: integer
+     status: integer(1)
+
+OfferFieldsDomain:
+  actAs: [ Timestampable ]
+  columns:
+     field_name: string(255)
+     value: clob
+     offer_id: integer(10)     
+     domain_id: integer(10) 
+  relations:
+    Domain:
+      class: Domains
+      local: domain_id
+      type: one
+
+OfferMultiSlug:
+  actAs: [ Timestampable ]
+  columns:
+     offer_id: integer(10)
+     slug: string(255)
+  relations:
+    Offer:
+      local: offer_id
+      foreign: id
+      type: one
+      class: Offer
+	  
+SenderProfileProvider:
+  actAs: [ Timestampable ]
+  columns:
+    sender_profile_id: integer(20)
+    provider: string(50)
+    email: string(255)
+    reply_to: string(255)
+    forward_to_email: string(255)
+  relations:
+    SenderProfile:
+      class: SenderProfile
+      local: sender_profile_id
+      type: one
+  indexes:
+    sender_profile_id_provider: { fields: [sender_profile_id, provider], type: unique }

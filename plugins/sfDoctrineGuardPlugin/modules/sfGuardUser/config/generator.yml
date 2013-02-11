@@ -1,0 +1,49 @@
+generator:
+  class:              sfDoctrineAdminGenerator
+  param:
+    model_class:      sfGuardUser
+    theme:            lookingo
+
+    list:
+      title:   User list
+      display: [ =username, created_at, last_login, last_ip, module_list]
+      fields:
+          module_list:  {name: Module Access List}
+      filters: [ username, email_address, last_ip, is_active ]
+      object_actions:
+          _edit: -
+          _delete: -
+          list_log:
+            name: User log
+            icon: /sf/sf_admin/images/user-log-icon.png
+            action: list_log
+            credentials: [[ backend_user_log_list ]]
+          list_login:
+            name: User login log
+            icon: /sf/sf_admin/images/user-login-log-icon.png
+            action: list_login
+            credentials: [[ backend_user_login_list ]]  
+      actions:
+          _create: { name: Add New User }
+
+    edit:
+      title:   Edit %%username%% user
+      fields:
+        username:                 { type: input_tag, name: 'Username' }
+        email_address:                 { type: input_tag, name: 'Email address' }
+        phone:                 { type: input_tag, name: 'Phone' }
+        first_name:                 { type: input_tag, name: 'First name' }
+        last_name:                 { type: input_tag, name: 'Last name' }
+        password:                 { name: 'Password' }
+        password_bis:             { name: 'Password (again)' }
+        groups:                   { name: 'Groups/Roles', type: doctrine_admin_check_list, params: associated_label=Assigned unassociated_label=Available }
+        permissions:              { name: 'Permissions', type: doctrine_admin_check_list, params: associated_label=Assigned unassociated_label=Available }
+        last_login:               { name: 'Last Login', type: plain }
+        last_ip:                  { name: 'Last Ip', type: plain }
+        created_at:               { name: 'Created at', type: plain }
+        updated_at:               { name: 'Updated at', type: plain }
+        is_active:                { type: checkbox_tag, name: 'Active?' }
+      display:
+        "NONE":                   [ username, email_address, phone, first_name, last_name, _password, _password_bis ]
+        "Information":            [ last_login, last_ip, created_at, updated_at ]
+        "Permissions and Groups": [ is_active, groups, permissions ]

@@ -1,0 +1,12 @@
+default:
+  is_secure: on
+list:
+  credentials: [ backend_user_login_list ]
+create:
+  credentials: [ backend_user_login_create ]
+delete:
+  credentials: [ backend_user_login_delete ]
+edit:
+  credentials: [ backend_user_login_edit ]
+save:
+  credentials: [ backend_user_login_save ]

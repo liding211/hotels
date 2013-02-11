@@ -1,0 +1,16 @@
+generator:
+  class:              sfDoctrineAdminGenerator
+  param:
+    model_class:      sfGuardUserLogin
+    theme:            lookingo
+
+    list:
+      title:   User Login list
+      fields:
+        user:   
+          email:              { name: 'User email' }
+        user_id: { type: input_tag, name: 'User Id' }  
+      display: [ user_id, user.email_address, ip, created_at ]
+      filters: [ user_id, user.email_address, ip, created_at ]
+
+ 

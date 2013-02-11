@@ -1,0 +1,7 @@
+propel:
+  content:
+    _attributes: { phpName: Content }
+    id:
+    title:       varchar(255)
+    content:     longvarchar
+    created_at:

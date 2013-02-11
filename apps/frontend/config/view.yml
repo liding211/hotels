@@ -3,7 +3,7 @@ default:
     content-type: text/html
 
   metas:
-    title:        symfony project
+    title:        Hello world
     robots:       index, follow
     description:  symfony project
     keywords:     symfony, project

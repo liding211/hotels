@@ -1,0 +1,12 @@
+default:
+  is_secure: on
+list:
+  credentials: [ backend_permission_list ]
+create:
+  credentials: [ backend_permission_create ]
+delete:
+  credentials: [ backend_permission_delete ]
+edit:
+  credentials: [ backend_permission_edit ]
+save:
+  credentials: [ backend_permission_save ]
