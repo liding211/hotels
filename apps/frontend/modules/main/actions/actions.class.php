@@ -23,4 +23,8 @@ class mainActions extends sfActions
   public function executeMyAction()
   {
   }
+  
+  public function executeFormAction()
+  {
+  }
 }

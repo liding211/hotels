@@ -1,8 +1,72 @@
 Options +FollowSymLinks +ExecCGI
 
-<IfModule mod_rewrite.c>
-  RewriteEngine On
+##RewriteRule ^(.*)$ blank.html [L]
 
+#SetEnvIfNoCase Host test\.lookingo\.com nopassreq
+
+
+# Gzip css styles and jz scripts
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    AddEncoding gzip .gz
+	RewriteCond %{HTTP:Accept-encoding} gzip
+	RewriteCond %{HTTP_USER_AGENT} !Safari
+	RewriteCond %{REQUEST_FILENAME}.gz -f
+	RewriteRule ^(.*)$ $1.gz [QSA,L]
+	
+	
+    RewriteCond %{HTTP_HOST} tf1 [NC]
+    RewriteRule ^robots\.txt$ robots-tf1.txt [L]
+</IfModule>
+<IfModule mod_headers.c>
+    Header append Vary User-Agent
+    <FilesMatch .*\.js.gz$>
+		ForceType text/javascript
+		Header set Content-Encoding: gzip
+		Header set Cache-control: private
+    </FilesMatch>
+    <FilesMatch .*\.css.gz$>
+		ForceType text/css
+		Header set Content-Encoding: gzip
+		Header set Cache-control: private
+    </FilesMatch>
+</IfModule>
+# End Gzip
+
+<IfModule mod_rewrite.c>
+
+	# redirect from deal-du-jour to tf1.lookingo buy page
+	RewriteEngine On
+	RewriteCond %{HTTP_HOST} deal-du-jour\.tf1\.fr [NC]
+	RewriteCond %{REQUEST_URI} ^/buy
+	RewriteRule ^(.+)$ http://tf1.lookingo.com/$1 [R=301,L]
+  
+  
+    RewriteEngine On
+	
+	RewriteRule ^ventes-privees-boutique/le-petit-patron/0  http://%{HTTP_HOST}/ventes-privees/le-petit-patron/2409?%{QUERY_STRING} [R=301,L]
+	RewriteRule ^ventes-privees-boutique/greezbee/0 http://%{HTTP_HOST}/ventes-privees/greezbee/casse-tete-1555?%{QUERY_STRING} [R=301,L]
+	RewriteRule ^ventes-privees-boutique/cbiopourmoi/0 http://%{HTTP_HOST}/ventes-privees-boutique/cbiopourmoi?%{QUERY_STRING} [R=301,L]
+
+		
+    ### new slug ###
+    RewriteRule ^segway$ http://%{HTTP_HOST}/?utm_layover=NA5D [R=301,L]
+    RewriteRule ^fly$ http://%{HTTP_HOST}/?utm_layover=NA5D [R=301,L]
+    RewriteRule ^freepie$ http://%{HTTP_HOST}/ouffer/1135?utm_source=flyer&utm_campaign=freepie [R=301,L]
+	RewriteRule ^pieface$ http://%{HTTP_HOST}/ouffer/1135?utm_source=flyer&utm_campaign=freepie [R=301,L]
+		
+   
+  
+  #RewriteRule (.*all.js|.*all-en.js|.*all.css|.*all-en.css) gz.php?f=$1 [NC]
+  
+  #Removing trailing slashes from url
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} ^(.+)/$
+  RewriteRule ^(.+)/$  /$1 [R=301,L]
+  
+  RewriteRule ^(.*/)?\.svn/ - [F,L]
+  ErrorDocument 403 "Access Forbidden"
+  
   # uncomment the following line, if you are having trouble
   # getting no_script_name to work
   #RewriteBase /
@@ -11,7 +75,11 @@ Options +FollowSymLinks +ExecCGI
   # comment the following 3 lines to allow periods in routes
   RewriteCond %{REQUEST_URI} \..+$
   RewriteCond %{REQUEST_URI} !\.html$
-  RewriteRule .* - [L]
+  RewriteCond %{REQUEST_URI} !rss\.xml$
+  RewriteCond %{REQUEST_URI} !criteo\.xml$
+  RewriteCond %{REQUEST_URI} !htc\.xml$
+  RewriteCond %{REQUEST_URI} !bonzai\.xml$
+  #RewriteRule .* - [L]
 
   # we check if the .html version is here (caching)
   RewriteRule ^$ index.html [QSA]
@@ -24,3 +92,4 @@ Options +FollowSymLinks +ExecCGI
 
 # big crash from our front web controller
 ErrorDocument 500 "<h2>Application error</h2>symfony application failed to start properly"
+
