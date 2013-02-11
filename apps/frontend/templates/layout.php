@@ -11,9 +11,9 @@
 
 </head>
 <body>
-
+    <div id="main_div">
 <?php echo $sf_data->getRaw('sf_content') ?>
-
+    </div>
 
 </body>
 </html>
