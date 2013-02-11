@@ -17,7 +17,8 @@ class mainActions extends sfActions
   public function executeIndex()
   {
     $this->text = 'Hello world!';
-    //$this->forward('default', 'module');
+    $this->description = 'For add this changes I create new branch \'index\' in
+        the project!';
   }
   
   public function executeMyAction()
