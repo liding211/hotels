@@ -47,4 +47,8 @@ class mainActions extends sfActions{
     private function cherrySecond(){
         
     }
+    
+    private function cherryThird(){
+        
+    }
 }
