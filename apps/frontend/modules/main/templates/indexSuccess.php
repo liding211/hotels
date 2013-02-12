@@ -1,3 +1,2 @@
-<p><?php echo $text; ?></p>
-<p><?php echo $description; ?></p>
-You are here: module 'main', action 'index'.
+<p style="font-size: 24px; font-weight: bold;"><?php echo $text; ?></p>
+<p style="font-size: 20px;"><?php echo $description; ?></p>
