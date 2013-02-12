@@ -28,6 +28,10 @@ class mainActions extends sfActions{
             $this->result = ($this->a + $this->b) / $this->d;
         }
     }
+    
+    public function stashed(){
+        $var = 'master branch';
+    }
 
     public function executeFormAction(){
     }
