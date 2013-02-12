@@ -1,6 +1,5 @@
 <?php echo link_to('Home', '/'); ?>
-<p style="font-size: 25px;">The sum of <?php echo $a; ?> plus <?php echo $b; ?> dividing 
-    <?php echo $d; ?> is <?php echo $result; ?></p>
+<p style="font-size: 25px;">The result is <?php echo $result; ?></p>
 <p>Test form</p>
 <form action="main/formAction">
     <?php echo label_for('name', 'Name:'); ?><br />
