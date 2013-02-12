@@ -39,4 +39,12 @@ class mainActions extends sfActions{
 
     public function executeFormAction(){
     }
+    
+    private function cherryFirst(){
+        
+    }
+    
+    private function cherrySecond(){
+        
+    }
 }
