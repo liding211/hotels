@@ -1,5 +1,6 @@
-<p>The sum of 2 plus 3 is <?php echo $result; ?></p>
-<p>Test form</p>
+<p style="font-size: 25px;">The sum of <?php echo $a; ?> plus <?php echo $b; ?> dividing 
+    <?php echo $d; ?> is <?php echo $result; ?><br />
+    Test form</p>
 <?php echo form_tag('main/formAction'); ?>
   <?php echo label_for('name', 'Name:'); ?><br />
   <?php echo input_tag('name'); ?><br />

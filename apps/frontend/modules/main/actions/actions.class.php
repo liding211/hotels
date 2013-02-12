@@ -14,14 +14,20 @@ class mainActions extends sfActions{
    *
    */
   public function executeIndex(){
-    $this->text = 'hi guys!';
-    $this->description = 'This is test text!';
+    $this->text = 'hi programmers!';
+    $this->description = 'This is test text!We have hardcore code!';
   }
   
   public function executeMyAction(){
-      $a = 2;
-      $b = 3;
-      $this->result = $a + $b;
+      $this->a = 109;
+      $this->b = 5;
+      $this->d = 0;
+      if($this->d === 0){
+          $this->result = 0;
+      }else{
+          $this->result = ($this->a + $this->b) / $this->d;
+      }
+      
   }
   
   public function executeFormAction(){
