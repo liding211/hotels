@@ -1,1 +1,0 @@
-You have successfully confirmed your e-mail address.
