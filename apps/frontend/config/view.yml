@@ -9,9 +9,9 @@ default:
     keywords:     symfony, project
     language:     en
 
-  stylesheets:    [main]
+  stylesheets:    [style]
 
-  javascripts:    []
+  javascripts:    [jquery-1.9.0.min.js]
 
   has_layout:     on
   layout:         layout

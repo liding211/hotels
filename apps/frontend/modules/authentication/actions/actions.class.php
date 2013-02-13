@@ -13,7 +13,7 @@ class authenticationActions extends sfActions{
      * Executes index action
      *
      */
-    public function executeIndex(){
+    public function executeAuthentication(){
         $this->text = 'Hi people!';
         $this->description = 'This is test text! We have cookies!';
     }
