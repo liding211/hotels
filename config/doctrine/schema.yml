@@ -1,6 +1,49 @@
 HotelsAdmin:
   columns:
-    email: { type: string(255), notnull: true, unique: true }
-    password: { type: string(255), notnull: true, unique: true }
+    email:      { type: string(255), notnull: true, unique: true }
+    password:   { type: string(255), notnull: true, unique: true }
     created_at: { type: timestamp, notnull: true }
     updated_at: { type: timestamp, notnull: true }
+
+HotelsClient:
+  columns:
+    first_name: { type: string(255), notnull: true }
+    last_name:  { type: string(255), notnull: true }
+    email:      { type: string(255), notnull: true, unique: true }
+    phone:      { type: string(255), notnull: true }
+    created_at: { type: timestamp, notnull: true }
+    updated_at: { type: timestamp, notnull: true }
+	
+HotelsReservation:
+  columns:
+    client_id:     { type: integer, notnull: true }
+    room_id:       { type: integer, notnull: true }
+    total:         { type: integer, notnull: true }
+    hash:          { type: string(255), notnull: true }
+    reserved_from: { type: timestamp, notnull: true }
+    reserved_to:   { type: timestamp, notnull: true }
+    created_at:    { type: timestamp, notnull: true }
+    updated_at:    { type: timestamp, notnull: true }
+  relations:
+    HotelsRoomType:
+      local:  room_id
+      foreign:  id
+    HotelsClient:
+      local:  client_id
+      foreign:  id
+  
+HotelsRoomType:
+  columns:
+    type: { type: string(255), notnull: true, unique: true }
+	
+HotelsRoom:
+  columns:
+    type_id:    { type: integer, notnull: true }
+    price:      { type: integer, notnull: true }
+    photo:      { type: string(255) }
+    created_at: { type: timestamp, notnull: true }
+    updated_at: { type: timestamp, notnull: true }
+  relations:
+    HotelsRoomType:
+      local:  type_id
+      foreign:  id
