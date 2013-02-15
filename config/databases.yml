@@ -1,7 +1,14 @@
-all:
-  propel:
-    class:      sfPropelDatabase
-    param:
-      phptype:  sqlite
-      database: %SF_DATA_DIR%/sandbox.db
+#all:
+#  propel:
+#   class:      sfPropelDatabase
+#    param:
+#      phptype:  sqlite
+#      database: %SF_DATA_DIR%/sandbox.db
 
+all:
+  doctrine:
+    class: sfDoctrineDatabase
+    param:
+      dsn: 'mysql:host=localhost;dbname=doctrine_hotels'
+      username: root
+      password: ''
