@@ -1,7 +1,12 @@
+#all:
+#  propel:
+#    class:      sfPropelDatabase
+#    param:
+#      phptype:  sqlite
+#      database: %SF_DATA_DIR%/sandbox.db
+
 all:
   propel:
-    class:      sfPropelDatabase
+    class:      sfDoctrineDatabase
     param:
-      phptype:  sqlite
-      database: %SF_DATA_DIR%/sandbox.db
-
+      dns: sqlite:///<?php echo dirname(__FILE__); ?>/doctrine.db

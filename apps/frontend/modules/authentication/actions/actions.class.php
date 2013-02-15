@@ -14,11 +14,13 @@ class authenticationActions extends sfActions{
      *
      */
     public function executeAuthentication(){
-        $this->text = 'Hi people!';
-        $this->description = 'This is test text! We have cookies!';
+        
+        //$this->forward('authentication', 'signin');
+        //$this->redirect('authentication/signin');
+        
     }
 
-    public function executeMyAction(){
-        $this->result = sqrt(44) - cos(45) * abs(-55);
+    public function executeSignin(){
+        
     }
 }

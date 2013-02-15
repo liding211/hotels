@@ -3,6 +3,10 @@ homepage:
   url:   /
   param: { module: authentication, action: authentication }
 
+main:
+  url:   /main
+  param: { module: authentication, action: authentication }
+
 default_symfony:
   url:   /symfony/:action/*
   param: { module: default }
