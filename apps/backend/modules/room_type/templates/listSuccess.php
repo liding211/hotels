@@ -3,12 +3,15 @@
 // date: 2013/02/15 16:31:19
 ?>
 <h1>room_type</h1>
-
+<?php if($massage): ?>
+    <?php echo $massage ?>
+<?php endif; ?>
 <table>
 <thead>
 <tr>
   <th>Id</th>
   <th>Type</th>
+  <th></th>
 </tr>
 </thead>
 <tbody>
@@ -16,9 +19,9 @@
 <tr>
     <td><?php echo link_to($hotels_room_type->get('id'), 'room_type/show?id='.$hotels_room_type->id); ?></td>
       <td><?php echo $hotels_room_type->get('type'); ?></td>
+      <td><?php echo link_to ('delete', 'room_type/delete?id='.$hotels_room_type->id) ?></td>
   </tr>
 <?php endforeach; ?>
-<tr><td>Number of hotels_room_types: <?php echo count($hotels_room_types) ?></td></tr>
 </tbody>
 </table>
 

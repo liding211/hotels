@@ -16,12 +16,13 @@
   <th>Reserved to</th>
   <th>Created at</th>
   <th>Updated at</th>
+  <th></th>
 </tr>
 </thead>
 <tbody>
 <?php foreach ($hotels_reservations as $hotels_reservation): ?>
-<tr>
-    <td><?php echo link_to($hotels_reservation->get('id'), 'reservation/show?id='.$hotels_reservation->id); ?></td>
+  <tr>
+      <td><?php echo link_to($hotels_reservation->get('id'), 'reservation/show?id='.$hotels_reservation->id); ?></td>
       <td><?php echo $hotels_reservation->get('HotelsClient'); ?></td>
       <td><?php echo $hotels_reservation->get('HotelsRoomType'); ?></td>
       <td><?php echo $hotels_reservation->get('total'); ?></td>
@@ -30,6 +31,7 @@
       <td><?php echo $hotels_reservation->get('reserved_to'); ?></td>
       <td><?php echo $hotels_reservation->get('created_at'); ?></td>
       <td><?php echo $hotels_reservation->get('updated_at'); ?></td>
+      <td><?php echo link_to ('delete', 'reservation/delete?id='.$hotels_reservation->get('id')) ?></td>
   </tr>
 <?php endforeach; ?>
 <tr><td>Number of hotels_reservations: <?php echo count($hotels_reservations) ?></td></tr>

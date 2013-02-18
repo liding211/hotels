@@ -1,9 +1,8 @@
 HotelsAdmin:
+  actAs: [ Timestampable ]
   columns:
     email:      { type: string(255), notnull: true, unique: true }
-    password:   { type: string(255), notnull: true, unique: true }
-    created_at: { type: timestamp, notnull: true }
-    updated_at: { type: timestamp, notnull: true }
+    password:   { type: string(255), notnull: true }
 
 HotelsClient:
   columns:
@@ -11,8 +10,6 @@ HotelsClient:
     last_name:  { type: string(255), notnull: true }
     email:      { type: string(255), notnull: true, unique: true }
     phone:      { type: string(255), notnull: true }
-    created_at: { type: timestamp, notnull: true }
-    updated_at: { type: timestamp, notnull: true }
 	
 HotelsReservation:
   columns:
@@ -22,10 +19,8 @@ HotelsReservation:
     hash:          { type: string(255), notnull: true }
     reserved_from: { type: timestamp, notnull: true }
     reserved_to:   { type: timestamp, notnull: true }
-    created_at:    { type: timestamp, notnull: true }
-    updated_at:    { type: timestamp, notnull: true }
   relations:
-    HotelsRoomType:
+    HotelsRoom:
       local:  room_id
       foreign:  id
     HotelsClient:
@@ -41,8 +36,6 @@ HotelsRoom:
     type_id:    { type: integer, notnull: true }
     price:      { type: integer, notnull: true }
     photo:      { type: string(255) }
-    created_at: { type: timestamp, notnull: true }
-    updated_at: { type: timestamp, notnull: true }
   relations:
     HotelsRoomType:
       local:  type_id

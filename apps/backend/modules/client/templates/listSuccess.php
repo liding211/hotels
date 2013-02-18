@@ -14,6 +14,7 @@
   <th>Phone</th>
   <th>Created at</th>
   <th>Updated at</th>
+  <th></th>
 </tr>
 </thead>
 <tbody>
@@ -26,6 +27,7 @@
       <td><?php echo $hotels_client->get('phone'); ?></td>
       <td><?php echo $hotels_client->get('created_at'); ?></td>
       <td><?php echo $hotels_client->get('updated_at'); ?></td>
+      <td><?php echo link_to ('delete', 'client/delete?id='.$hotels_client->get('id')) ?></td>
   </tr>
 <?php endforeach; ?>
 <tr><td>Number of hotels_clients: <?php echo count($hotels_clients) ?></td></tr>

@@ -24,6 +24,7 @@
       <td><?php echo $hotels_room->get('photo'); ?></td>
       <td><?php echo $hotels_room->get('created_at'); ?></td>
       <td><?php echo $hotels_room->get('updated_at'); ?></td>
+      <td><?php echo link_to ('delete', 'room/delete?id='.$hotels_room->get('id')) ?></td>
   </tr>
 <?php endforeach; ?>
 <tr><td>Number of hotels_rooms: <?php echo count($hotels_rooms) ?></td></tr>

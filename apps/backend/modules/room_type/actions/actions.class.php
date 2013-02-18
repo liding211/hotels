@@ -56,7 +56,8 @@ class room_typeActions extends sfActions
     }
     catch (Doctrine_Exception $e)
     {
-      $this->getRequest()->setError('delete', 'Could not delete the selected Hotels room type. Make sure it does not have any associated items.');
+      $this->massage = 'Could not delete the selected Hotels room type. Make sure it does not have any associated items.';
+      $this->getRequest()->setError('delete', $this->massage);
       return $this->forward('room_type', 'list');
     }
   }
