@@ -1,0 +1,23 @@
+sfUserPhone:
+  actAs:
+    Timestampable:
+    Userstampable:
+    Rankable:
+  columns:
+    user_id: integer
+    phone_type_id: integer
+    number:
+      type: string
+      length: 20
+    extension:
+      type: string
+      length: 10
+  relations:
+    User:
+      foreignAlias: Phones
+      class: sfUserUser
+      local: user_id
+      onDelete: CASCADE
+    PhoneType:
+      class: sfUserPhoneType
+      local: phone_type_id

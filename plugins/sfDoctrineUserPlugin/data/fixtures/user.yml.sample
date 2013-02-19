@@ -1,0 +1,87 @@
+###
+sfUserUser:
+  AdminUser:
+    GuardUser: sgu_admin
+    first_name: Default
+    last_name: User
+
+###
+sfUserPhone:
+  AdminUserPhone:
+    User: AdminUser
+    PhoneType: PhoneCell
+    number: '5555555555'
+    extension: 123
+    rank: 1
+    CreatedBy: AdminUser
+    UpdatedBy: AdminUser
+  AdminUserPhone2:
+    User: AdminUser
+    PhoneType: PhoneHome
+    number: '5555555555'
+    extension: 456
+    rank: 2
+    CreatedBy: AdminUser
+    UpdatedBy: AdminUser
+
+###
+sfUserAddress:
+  AdminUserAddress:
+    User: AdminUser
+    AddressType: AddressHome
+    address1: 123 Street Place
+    address2: Building 2
+    address3: Apt. 123
+    city: New York
+    State: NEWYORK
+    zip: 12345
+    rank: 1
+    CreatedBy: AdminUser
+    UpdatedBy: AdminUser
+  AdminUserAddress2:
+    User: AdminUser
+    AddressType: AddressHome
+    address1: 456 Street Drive
+    address2: Building 5
+    address3: Apt. 123
+    city: New York
+    State: CALIFORNIA
+    zip: 12345
+    rank: 2
+    CreatedBy: AdminUser
+    UpdatedBy: AdminUser
+
+###
+sfUserEmailAddress:
+  AdminUserEmail:
+    User: AdminUser
+    EmailAddressType: EmailAddressBusiness
+    address: 'email@aol.com'
+    rank: 1
+    CreatedBy: AdminUser
+    UpdatedBy: AdminUser
+  AdminUserEmail2:
+    User: AdminUser
+    EmailAddressType: EmailAddressHome
+    address: 'email2@aol.com'
+    rank: 2
+    CreatedBy: AdminUser
+    UpdatedBy: AdminUser
+
+###
+sfUserImAccount:
+  AdminUserIm:
+    User: AdminUser
+    ImAccountType: AIM
+    nickname: screenname
+    rank: 1
+    UpdatedBy: AdminUser
+    CreatedBy: AdminUser
+
+###
+sfUserNote:
+  AdminUserNote:
+    User: AdminUser
+    body: This is the original Administrative User added through the sample fixture file
+    UpdatedBy: AdminUser
+    CreatedBy: AdminUser

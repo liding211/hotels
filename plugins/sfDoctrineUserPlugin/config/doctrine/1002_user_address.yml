@@ -1,0 +1,36 @@
+sfUserAddress:
+  actAs:
+    Timestampable:
+    Userstampable:
+    Rankable:
+  columns:
+    user_id: integer
+    address_type_id: integer
+    address1:
+      type: string
+      length: 45
+    address2:
+      type: string
+      length: 45
+    address3:
+      type: string
+      length: 45
+    city:
+      type: string
+      length: 45
+    state_id: integer
+    zip:
+      type: string
+      length: 10
+  relations:
+    User:
+      class: sfUserUser
+      foreignAlias: Addresses
+      local: user_id
+      onDelete: CASCADE
+    AddressType:
+      class: sfUserAddressType
+      local: address_type_id
+    State:
+      class: sfUserState
+      local: state_id

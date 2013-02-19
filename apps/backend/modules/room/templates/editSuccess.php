@@ -12,44 +12,20 @@
 <table>
 <tbody>
 <tr>
-  <th>Hotels room type: </th>
-  <td><?php echo object_select_tag($hotels_room, array (
-  0 => 'get',
-  1 => 
-  array (
-    0 => 'type_id',
-  ),
-), array (
-  'related_class' => 'HotelsRoomType',
-  'control_name' => 'hotels_room[HotelsRoomType]',
-  'include_blank' => true,
-)) ?></td>
+  <th>Hotels room type:</th>
+  <td><?php echo select_tag(
+          'hotels_room[HotelsRoomType]', 
+          options_for_select($type, $hotels_room->type_id) 
+          ) ?>
+  </td>
 </tr>
 <tr>
   <th>Price: </th>
-  <td><?php echo object_input_tag($hotels_room, array (
-  0 => 'get',
-  1 => 
-  array (
-    0 => 'price',
-  ),
-), array (
-  'size' => 7,
-  'control_name' => 'hotels_room[price]',
-)) ?></td>
+  <td><?php echo input_tag('hotels_room[price]', $hotels_room['price']) ?></td>
 </tr>
 <tr>
   <th>Photo: </th>
-  <td><?php echo object_input_tag($hotels_room, array (
-  0 => 'get',
-  1 => 
-  array (
-    0 => 'photo',
-  ),
-), array (
-  'size' => 80,
-  'control_name' => 'hotels_room[photo]',
-)) ?></td>
+  <td><?php echo input_tag('hotels_room[photo]', $hotels_room['photo']) ?></td>
 </tr>
 
 </tbody>

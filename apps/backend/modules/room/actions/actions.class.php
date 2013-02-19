@@ -33,13 +33,15 @@ class roomActions extends sfActions
 
   public function executeCreate ()
   {
+    $this->getRoomTypeList();
     $this->hotels_room = new HotelsRoom();
     $this->setTemplate('edit');
   }
 
   public function executeEdit ()
   {
-    $this->hotels_room = Doctrine::getTable('HotelsRoom')->find($this->getRequestParameter('id'));    
+    $this->getRoomTypeList();
+    $this->hotels_room = Doctrine::getTable('HotelsRoom')->find($this->getRequestParameter('id'));
     $this->forward404Unless($this->hotels_room);
   }
 
@@ -90,5 +92,13 @@ class roomActions extends sfActions
     $hotels_room->save();
 
     return $this->redirect('room/show?id='.$hotels_room->id);
+  }
+  
+  private function getRoomTypeList(){
+    $this->type = array();
+    $this->hotels_room_type = Doctrine::getTable('HotelsRoomType')->findAll();
+    foreach($this->hotels_room_type as $val){
+        $this->type[$val->id] = $val->type;
+    }
   }
 }

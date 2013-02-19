@@ -11,13 +11,8 @@
 
 </head>
 <body>
-<div id="menu">
-            <?php echo link_to('Room', 'room'); ?>&nbsp;
-            <?php echo link_to('Type of room', 'room_type'); ?>&nbsp;
-            <?php echo link_to('Our client', 'client'); ?>&nbsp;
-            <?php echo link_to('List of the order', 'reservation'); ?>
-</div>
-
+    
+<?php include('main_menu.php') ?>
 <?php echo $sf_data->getRaw('sf_content') ?>
 
 </body>

@@ -1,22 +1,25 @@
 HotelsAdmin:
   actAs: [ Timestampable ]
   columns:
-    email:      { type: string(255), notnull: true, unique: true }
-    password:   { type: string(255), notnull: true }
+    email:           { type: string(50), notnull: true, unique: true }
+    password:        { type: string(32), notnull: true }
+    last_entered_at: { type: timestamp }
 
 HotelsClient:
+  actAs: [ Timestampable ]
   columns:
-    first_name: { type: string(255), notnull: true }
-    last_name:  { type: string(255), notnull: true }
-    email:      { type: string(255), notnull: true, unique: true }
-    phone:      { type: string(255), notnull: true }
+    first_name: { type: string(100), notnull: true }
+    last_name:  { type: string(100), notnull: true }
+    email:      { type: string(50), notnull: true, unique: true }
+    phone:      { type: string(20), notnull: true }
 	
 HotelsReservation:
+  actAs: [ Timestampable ]
   columns:
-    client_id:     { type: integer, notnull: true }
-    room_id:       { type: integer, notnull: true }
-    total:         { type: integer, notnull: true }
-    hash:          { type: string(255), notnull: true }
+    client_id:     { type: integer(11), notnull: true }
+    room_id:       { type: integer(11), notnull: true }
+    total:         { type: integer(11), notnull: true }
+    hash:          { type: string(32), notnull: true }
     reserved_from: { type: timestamp, notnull: true }
     reserved_to:   { type: timestamp, notnull: true }
   relations:
@@ -26,17 +29,19 @@ HotelsReservation:
     HotelsClient:
       local:  client_id
       foreign:  id
-  
-HotelsRoomType:
-  columns:
-    type: { type: string(255), notnull: true, unique: true }
 	
 HotelsRoom:
+  actAs: [ Timestampable ]
   columns:
-    type_id:    { type: integer, notnull: true }
-    price:      { type: integer, notnull: true }
-    photo:      { type: string(255) }
+    type_id:    { type: integer(11), notnull: true }
+    price:      { type: integer(11), notnull: true }
+    photo:      { type: string(200) }
   relations:
     HotelsRoomType:
       local:  type_id
       foreign:  id
+  
+HotelsRoomType:
+  actAs: [ Timestampable ]
+  columns:
+    type: { type: string(200), notnull: true, unique: true }

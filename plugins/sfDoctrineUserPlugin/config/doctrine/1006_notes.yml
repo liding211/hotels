@@ -1,0 +1,13 @@
+sfUserNote:
+  actAs:
+    Timestampable:
+    Userstampable:
+  columns:
+    user_id: integer
+    body: string
+  relations:
+    User:
+      class: sfUserUser
+      foreignAlias: Notes
+      local: user_id
+      onDelete: CASCADE
