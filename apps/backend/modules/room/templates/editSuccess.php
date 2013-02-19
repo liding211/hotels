@@ -15,12 +15,12 @@
   <th>Hotels room type:</th>
   <td><?php echo select_tag(
           'hotels_room[HotelsRoomType]', 
-          options_for_select($type, $hotels_room->type_id) 
+          options_for_select($type_list, $hotels_room->type_id) 
           ) ?>
   </td>
 </tr>
 <tr>
-  <th>Price: </th>
+  <th>Price (in cents): </th>
   <td><?php echo input_tag('hotels_room[price]', $hotels_room['price']) ?></td>
 </tr>
 <tr>

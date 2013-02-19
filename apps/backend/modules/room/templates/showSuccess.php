@@ -10,11 +10,11 @@
 </tr>
 <tr>
 <th>Hotels room type: </th>
-<td><?php echo $hotels_room->getHotelsRoomType() ?></td>
+<td><?php echo $hotels_room->getHotelsRoomType()->gettype() ?></td>
 </tr>
 <tr>
 <th>Price: </th>
-<td><?php echo $hotels_room->getprice() ?></td>
+<td><?php vprintf('%01.2f', $hotels_room->getprice()/100); ?> $</td>
 </tr>
 <tr>
 <th>Photo: </th>

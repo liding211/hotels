@@ -17,18 +17,21 @@
 </thead>
 <tbody>
 <?php foreach ($hotels_rooms as $hotels_room): ?>
-<tr>
-    <td><?php echo link_to($hotels_room->get('id'), 'room/show?id='.$hotels_room->id); ?></td>
-      <td><?php echo $hotels_room->get('HotelsRoomType'); ?></td>
-      <td><?php echo $hotels_room->get('price'); ?></td>
-      <td><?php echo $hotels_room->get('photo'); ?></td>
-      <td><?php echo $hotels_room->get('created_at'); ?></td>
-      <td><?php echo $hotels_room->get('updated_at'); ?></td>
-      <td><?php echo link_to ('delete', 'room/delete?id='.$hotels_room->get('id')) ?></td>
+  <tr>
+    <td><?php echo $hotels_room->get('id'); ?></td>
+    <td><?php echo $hotels_room->get('HotelsRoomType')->get('type'); ?></td>
+    <td><?php vprintf('%01.2f', $hotels_room->get('price')/100); ?> $</td>
+    <td><?php echo $hotels_room->get('photo'); ?></td>
+    <td><?php echo $hotels_room->get('created_at'); ?></td>
+    <td><?php echo $hotels_room->get('updated_at'); ?></td>
+    <td>
+        <?php echo link_to('open', 'room/show?id='.$hotels_room->id); ?>&nbsp;
+        <?php echo link_to('edit', 'room/edit?id='.$hotels_room->id) ?>&nbsp;
+        <?php echo link_to ('delete', 'room/delete?id='.$hotels_room->id) ?>
+    </td>
   </tr>
 <?php endforeach; ?>
-<tr><td>Number of hotels_rooms: <?php echo count($hotels_rooms) ?></td></tr>
 </tbody>
 </table>
-
+Number of hotels_rooms: <?php echo count($hotels_rooms) ?><br />
 <?php echo link_to ('create', 'room/create') ?>
