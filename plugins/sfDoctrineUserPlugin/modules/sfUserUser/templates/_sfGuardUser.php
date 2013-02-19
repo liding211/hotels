@@ -1,1 +1,0 @@
-<?php echo include_component('sfUserUser', 'selectGuardUser', array('object' => $sf_user_user, 'super' => 'sf_user_user', )); ?>
