@@ -3,7 +3,7 @@ HotelsAdmin:
   columns:
     email:           { type: string(50), notnull: true, unique: true }
     password:        { type: string(32), notnull: true }
-    last_entered_at: { type: timestamp }
+    last_loggedin_at: { type: timestamp }
 
 HotelsClient:
   actAs: [ Timestampable ]
