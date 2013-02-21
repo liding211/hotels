@@ -1,0 +1,21 @@
+## YAML Template.
+---
+fillin:
+  enabled: true  # Enable the form repopulation
+    
+fields:
+  hotels_client{email}:
+    required: { msg: The email field cannot be left blank }
+    sfEmailValidator:
+      strict:       true
+      email_error:  This email address is invalid
+    sfDoctrineUniqueValidator:
+      class:        HotelsClient
+      column:       email
+      unique_error: The client with such email already exists. Please choose another one.
+  hotels_client{first_name}:
+    required: { msg: Required }
+  hotels_client{last_name}:
+    required: { msg: Required }
+  hotels_client{phone}:
+    required: { msg: Required }

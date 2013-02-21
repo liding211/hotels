@@ -11,77 +11,16 @@
  * @subpackage room_type
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Olivier Verdier <Olivier.Verdier@gmail.com>
- * @version    SVN: $Id: actions.class.php 5639 2007-10-23 14:27:18Z Eric.Fredj $
+ * @version    SVN: $Id: actions.class.php 5639 2007-10-23 14:27:18Z Eric.Fredj 
  */
-class room_typeActions extends sfActions
-{
-  public function executeIndex ()
-  {
-    return $this->forward('room_type', 'list');
-  }
-
-  public function executeList ()
-  {
-  	$this->hotels_room_types = Doctrine::getTable('HotelsRoomType')->findAll();
-  }
-
-  public function executeShow ()
-  {
-    $this->hotels_room_type = Doctrine::getTable('HotelsRoomType')->find($this->getRequestParameter('id'));    
-    $this->forward404Unless($this->hotels_room_type);
-  }
-
-  public function executeCreate ()
-  {
-    $this->hotels_room_type = new HotelsRoomType();
-    $this->setTemplate('edit');
-  }
-
-  public function executeEdit ()
-  {
-    $this->hotels_room_type = Doctrine::getTable('HotelsRoomType')->find($this->getRequestParameter('id'));    
-    $this->forward404Unless($this->hotels_room_type);
-  }
-
-  public function executeDelete ()
-  {
-    $this->hotels_room_type = Doctrine::getTable('HotelsRoomType')->find($this->getRequestParameter('id'));    
-    
-    $this->forward404Unless($this->hotels_room_type);
-
-    try
-    {
-      $this->hotels_room_type->delete();
-      $this->redirect('room_type/list');
+class room_typeActions extends autoroom_typeActions{
+    public function executeShow(){
+        $room_type_id = (int) $this->getRequestParameter('id', 0);
+        if(empty($room_type_id)){
+            $this->setFlash('warning', 'Invalid room type id specified');
+            $this->redirect('room_type');
+        }
+        $this->hotels_room_type = Doctrine::getTable('HotelsRoomType')
+            ->find($room_type_id);
     }
-    catch (Doctrine_Exception $e)
-    {
-      $this->massage = 'Could not delete the selected Hotels room type. Make sure it does not have any associated items.';
-      $this->getRequest()->setError('delete', $this->massage);
-      return $this->forward('room_type', 'list');
-    }
-  }
-
-  public function executeUpdate ()
-  {
-    if (!$this->getRequestParameter('id'))
-    {
-      $hotels_room_type = new HotelsRoomType();
-    }
-    else
-    {
-      $hotels_room_type = Doctrine::getTable('HotelsRoomType')->find($this->getRequestParameter('id'));
-      $this->forward404Unless($hotels_room_type);
-    }
-
-    $formData = $this->getRequestParameter('hotels_room_type');
-    if ($newValue = $formData['type'])
-    {
-	     $hotels_room_type->set('type', $newValue);
-    }
-
-    $hotels_room_type->save();
-
-    return $this->redirect('room_type/show?id='.$hotels_room_type->id);
-  }
 }

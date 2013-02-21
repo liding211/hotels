@@ -1,6 +1,5 @@
 cache
 log
-/nbproject/private/
-/nbproject/
-master
-/lib/model/doctrine/generated/
+nbproject/private/
+nbproject/
+lib/model/doctrine/generated/

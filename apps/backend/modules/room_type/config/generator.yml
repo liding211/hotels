@@ -1,0 +1,20 @@
+generator:
+  class: sfDoctrineAdminGenerator
+  param:
+    model_class: HotelsRoomType
+    list:
+      title: Room type
+      display: [ id, type ]
+      filters: [ type ]
+      object_actions:
+        _edit: ~
+        show:
+          name: Show
+          action: show
+          icon: /sf/sf_admin/images/default_icon.png
+        _delete: ~
+        
+      max_per_page: 10
+    edit:
+      title: Editing client "%%type%%"
+      display: [ type ]

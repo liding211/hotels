@@ -1,4 +1,4 @@
-<?php if(array_intersect($_SESSION['symfony/user/sfUser/credentials'], array('admin'))): ?>
+<?php if($sf_user->isAuthenticated()): ?>
     <div id="menu">
         <?php echo link_to('Room', 'room'); ?>&nbsp;
         <?php echo link_to('Type of room', 'room_type'); ?>&nbsp;
@@ -7,3 +7,4 @@
         <?php echo link_to('Logout', 'auth/Logout'); ?>
     </div>
 <?php endif; ?>
+

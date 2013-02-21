@@ -14,7 +14,6 @@ class authActions extends sfActions {
 
         $admin['email'] = 'admin';
         $admin['password'] = 'admin';
-        //var_dump($params);
         if($params['email'] != $admin['email'] OR $params['password'] != $admin['password']){
             $this->getRequest()->setError('login', 'Invalid login or password');
         }

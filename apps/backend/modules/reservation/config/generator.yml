@@ -1,0 +1,12 @@
+generator:
+  class: sfDoctrineAdminGenerator
+  param:
+    model_class: HotelsReservation
+    list:
+      title: Reservations
+      display: [ HotelsClient.first_name'; 'HotelsClient.last_name, room_id, total, hash, created_at, updated_at ]
+      filters: [ _client_id, created_at, updated_at ]
+      max_per_page: 20
+    edit:
+      title: Editing reservation "%%id%%"
+      display: [ _client_id, room_id, total, updated_at ]
