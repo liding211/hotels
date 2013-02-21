@@ -14,4 +14,31 @@
  * @version    SVN: $Id: actions.class.php 5639 2007-10-23 14:27:18Z Eric.Fredj $
  */
 class reservationActions extends autoreservationActions{
+    
+    protected function addFiltersCriteria($q){
+        parent::addFiltersCriteria($q);
+        if (isset($this->filters['client_name']) && 
+            $this->filters['client_name'] !== ''){
+          $this->filters['client_name'] = preg_replace('/[ ]+/i', ' ', trim($this->filters['client_name']));
+          $this->filters['client_name'] = preg_replace('/[^\w ]+/i', '', $this->filters['client_name']);
+          $q->innerJoin("HotelsReservation.HotelsClient c");
+          $q->addWhere("c.first_name like ? OR c.last_name like ?",  
+              array("%{$this->filters['client_name']}%", "%{$this->filters['client_name']}%"));
+        }
+    }
+    
+    public function executeShow(){
+        $reservation_id = (int) $this->getRequestParameter('id', 0);
+        if(empty($reservation_id)){
+            $this->setFlash('warning', 'Invalid reservation id');
+            $this->redirect('reservation');
+        }
+        
+        $this->hotels_reservation = Doctrine::getTable('HotelsReservation')->find($reservation_id);
+        
+        if(empty($this->hotels_reservation)){
+            $this->setFlash('warning', 'Reservation with such id not exist');
+            $this->redirect('reservation');
+        }
+    }
 }

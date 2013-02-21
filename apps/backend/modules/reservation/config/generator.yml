@@ -4,9 +4,28 @@ generator:
     model_class: HotelsReservation
     list:
       title: Reservations
-      display: [ HotelsClient.first_name'; 'HotelsClient.last_name, room_id, total, hash, created_at, updated_at ]
-      filters: [ _client_id, created_at, updated_at ]
+      fields:
+        client_name_filter:
+          name: Client name
+        HotelsClient:
+          full_name:
+            name: Client
+          email:
+            name: Client email
+        HotelsRoom:
+          HotelsRoomType:
+            type:
+              name: Type
+      display: [ HotelsClient.full_name , HotelsRoom.HotelsRoomType.type, _total_list, hash, reserved_from, reserved_to ]
+      filters: [ _client_name_filter, HotelsClient.email, reserved_from, reserved_to ]
       max_per_page: 20
+      object_actions:
+        _edit: ~
+        show: 
+          name: Show reservation
+          action: show
+          icon: /sf/sf_admin/images/default_icon.png
+        _delete: ~
     edit:
       title: Editing reservation "%%id%%"
-      display: [ _client_id, room_id, total, updated_at ]
+      display: [ client_id, room_id, total, updated_at ]
