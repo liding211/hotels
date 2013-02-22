@@ -7,6 +7,9 @@
 
 <?php include_title() ?>
 
+<?php use_javascript('http://code.jquery.com/jquery-1.9.1.js') ?>
+<?php use_javascript('http://code.jquery.com/ui/1.10.1/jquery-ui.js') ?>
+
 <link rel="shortcut icon" href="/favicon.ico" />
 
 </head>
@@ -19,9 +22,6 @@
 <? endif ?>
 <? if($sf_flash->has('warning')): ?>
 <p style="color: red; font-size: 16px;"><?= $sf_flash->get('warning') ?></p>
-<? endif ?>
-<? if($sf_flash->has('notice')): ?>
-<p style="color: red;  font-size: 14px;"><?= $sf_flash->get('notice') ?></p>
 <? endif ?>
 <? if($sf_flash->has('message')): ?>
 <p style="color: green; font-weight: bold; font-size: 18px;"><?= $sf_flash->get('message') ?></p>

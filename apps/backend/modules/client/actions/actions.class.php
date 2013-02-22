@@ -14,6 +14,13 @@
  * @version    SVN: $Id: actions.class.php 5639 2007-10-23 14:27:18Z Eric.Fredj $
  */
 class clientActions extends autoclientActions{
+    public function addFiltersCriteria($q){
+        parent::addFiltersCriteria($q);
+        if(isset($this->filters['email']) && $this->filters['email'] !== ''){
+            $q->addWhere("HotelsClient.email LIKE ?", "%{$this->filters['email']}%");
+        }
+    }
+    
     public function executeShow(){
         $client_id = (int) $this->getRequestParameter('id', 0);
         if(empty($client_id)){
@@ -21,5 +28,20 @@ class clientActions extends autoclientActions{
             $this->redirect('client');
         }
         $this->hotels_client = Doctrine::getTable('HotelsClient')->find($client_id);
+    }
+    
+    public function executeGetEmailList(){
+        $email_list = array();
+        $email = preg_replace('/[^\w@\.\-]+/i', '', $this->getRequestParameter('term'));
+        
+        $client_emails = Doctrine_Manager::connection()
+            ->fetchAll('SELECT id, email FROM hotels_client WHERE email LIKE ?', array("%$email%"));
+        
+        foreach($client_emails as $client_email){
+            $email_list[$client_email['id']] = $client_email['email'];
+        }
+        
+        $this->renderText(json_encode($email_list));
+        return sfView::NONE;
     }
 }

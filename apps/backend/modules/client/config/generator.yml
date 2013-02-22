@@ -5,7 +5,10 @@ generator:
     list:
       title: Clients
       display: [ id, first_name, last_name, email ]
-      filters: [ email, phone ]
+      filters: [ _email_filter, phone ]
+      fields:
+        email_filter:
+          name: E-mail
       max_per_page: 10
       object_actions:
         _edit: ~

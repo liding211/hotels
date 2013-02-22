@@ -9,7 +9,7 @@ default:
     keywords:     symfony, project
     language:     en
 
-  stylesheets:    [style]
+  stylesheets:    [ style, http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css ]
 
   javascripts:    []
 

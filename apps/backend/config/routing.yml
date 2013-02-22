@@ -3,6 +3,10 @@ homepage:
   url:   /
   param: { module: room, action: index }
 
+get_email_list:
+  url:   /client/get_email_list
+  param: { module: client, action: GetEmailList }
+
 default_index:
   url:   /:module
   param: { action: index }

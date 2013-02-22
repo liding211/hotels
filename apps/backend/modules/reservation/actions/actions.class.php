@@ -17,18 +17,48 @@ class reservationActions extends autoreservationActions{
     
     protected function addFiltersCriteria($q){
         parent::addFiltersCriteria($q);
+        
+        if(isset($this->filters['email']) && 
+            $this->filters['email'] !== ''){
+            
+            $this->filters['client_name'] = preg_replace('/[ ]+/i', ' ', trim($this->filters['client_name']));
+            $this->filters['client_name'] = preg_replace('/[^\w ]+/i', '', $this->filters['client_name']);
+
+            $q->addWhere("HotelsReservation.HotelsClient.email like ?", array("%{$this->filters['email']}%"));
+        }
+        
         if (isset($this->filters['client_name']) && 
             $this->filters['client_name'] !== ''){
-          $this->filters['client_name'] = preg_replace('/[ ]+/i', ' ', trim($this->filters['client_name']));
-          $this->filters['client_name'] = preg_replace('/[^\w ]+/i', '', $this->filters['client_name']);
-          $q->innerJoin("HotelsReservation.HotelsClient c");
-          $q->addWhere("c.first_name like ? OR c.last_name like ?",  
-              array("%{$this->filters['client_name']}%", "%{$this->filters['client_name']}%"));
+        
+            $this->filters['client_name'] = preg_replace('/[ ]+/i', ' ', trim($this->filters['client_name']));
+            $this->filters['client_name'] = preg_replace('/[^\w ]+/i', '', $this->filters['client_name']);
+
+            $q->innerJoin("HotelsReservation.HotelsClient c");
+            $q->addWhere("c.first_name like ? OR c.last_name like ?",  
+                array("%{$this->filters['client_name']}%", "%{$this->filters['client_name']}%"));
         }
+    }
+    
+    protected function updateHotelsReservationFromRequest(){
+        $email = preg_replace('/[^\w@\.\-]+/i', '', $this->getRequestParameter('client[email]'));
+
+        $client_id = Doctrine_Manager::connection()
+            ->fetchOne('SELECT id FROM hotels_client WHERE email = ?', array($email));
+
+        if($client_id === false){
+            $this->setFlash('warning', 'No such e-mail');
+            $this->redirect('reservation/edit?id=' . $this->getRequestParameter('id'));
+        }
+        else if(isset($client_id)){
+            $this->hotels_reservation->set('client_id', $client_id);
+        }
+
+        parent::updateHotelsReservationFromRequest();
     }
     
     public function executeShow(){
         $reservation_id = (int) $this->getRequestParameter('id', 0);
+        
         if(empty($reservation_id)){
             $this->setFlash('warning', 'Invalid reservation id');
             $this->redirect('reservation');

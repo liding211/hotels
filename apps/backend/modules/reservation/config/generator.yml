@@ -7,17 +7,17 @@ generator:
       fields:
         client_name_filter:
           name: Client name
+        email_filter:
+          name: Client e-mail
         HotelsClient:
           full_name:
             name: Client
-          email:
-            name: Client email
         HotelsRoom:
           HotelsRoomType:
             type:
               name: Type
       display: [ HotelsClient.full_name , HotelsRoom.HotelsRoomType.type, _total_list, hash, reserved_from, reserved_to ]
-      filters: [ _client_name_filter, HotelsClient.email, reserved_from, reserved_to ]
+      filters: [ _client_name_filter, _email_filter, reserved_from, reserved_to ]
       max_per_page: 20
       object_actions:
         _edit: ~
@@ -28,4 +28,7 @@ generator:
         _delete: ~
     edit:
       title: Editing reservation "%%id%%"
-      display: [ client_id, room_id, total, updated_at ]
+      display: [ _client_email_edit, room_id, total, reserved_from, reserved_to ]
+      fields:
+        client_email_edit:
+          name: Client e-mail

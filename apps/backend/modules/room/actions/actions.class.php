@@ -14,6 +14,20 @@
  * @version    SVN: $Id: actions.class.php 5639 2007-10-23 14:27:18Z Eric.Fredj $
  */
 class roomActions extends autoroomActions{
+    
+    protected function addFiltersCriteria($q){
+        parent::addFiltersCriteria($q);
+        
+        if(isset($this->filters['price']) && 
+            $this->filters['price'] !== ''){
+            
+            $this->filters['price'] = preg_replace('/[ ]+/i', ' ', trim($this->filters['client_name']));
+            $this->filters['price'] = preg_replace('/[^\w ]+/i', '', $this->filters['client_name']);
+
+            $q->addWhere("HotelsReservation.HotelsClient.email like ?", array("%{$this->filters['email']}%"));
+        }
+    }
+    
     public function executeShow(){
         $room_id = (int) $this->getRequestParameter('id', 0);
         if(empty($room_id)){
