@@ -15,23 +15,29 @@
  */
 class reservationActions extends autoreservationActions{
     
+    public function validateHideInput (){
+        return false;
+    }
+
+
     protected function addFiltersCriteria($q){
         parent::addFiltersCriteria($q);
         
-        if(isset($this->filters['email']) && 
-            $this->filters['email'] !== ''){
+        if(isset($this->filters['email']) && $this->filters['email'] !== ''){
             
-            $this->filters['client_name'] = preg_replace('/[ ]+/i', ' ', trim($this->filters['client_name']));
-            $this->filters['client_name'] = preg_replace('/[^\w ]+/i', '', $this->filters['client_name']);
+            $this->filters['email'] = preg_replace('/[^\w@\-\.]+/i', '', 
+                $this->filters['email']);
 
-            $q->addWhere("HotelsReservation.HotelsClient.email like ?", array("%{$this->filters['email']}%"));
+            $q->addWhere("HotelsReservation.HotelsClient.email like ?", 
+                array("%{$this->filters['email']}%"));
         }
         
-        if (isset($this->filters['client_name']) && 
-            $this->filters['client_name'] !== ''){
+        if (isset($this->filters['client_name']) && $this->filters['client_name'] !== ''){
         
-            $this->filters['client_name'] = preg_replace('/[ ]+/i', ' ', trim($this->filters['client_name']));
-            $this->filters['client_name'] = preg_replace('/[^\w ]+/i', '', $this->filters['client_name']);
+            $this->filters['client_name'] = preg_replace('/[ ]+/i', ' ', 
+                trim($this->filters['client_name']));
+            $this->filters['client_name'] = preg_replace('/[^\w ]+/i', '', 
+                $this->filters['client_name']);
 
             $q->innerJoin("HotelsReservation.HotelsClient c");
             $q->addWhere("c.first_name like ? OR c.last_name like ?",  
@@ -41,11 +47,14 @@ class reservationActions extends autoreservationActions{
     
     protected function updateHotelsReservationFromRequest(){
         
-        $client_email = preg_replace('/[^\w@\.\-]+/i', '', 
-            $this->getRequestParameter('client_email'));
-        $client_id = preg_replace('/[^\d]+/', '', 
-            $this->getRequestParameter('hotels_reservation[client_id]'));
-
+        //validate client id and email
+        
+        $client_email = filter_var($this->getRequestParameter('client_email'), 
+            FILTER_VALIDATE_EMAIL);
+        $client_id = (int) $this->getRequestParameter('hotels_reservation[client_id]');
+        
+        //check if client exist with specified parameters
+        
         $client = Doctrine_Manager::connection()
             ->fetchOne('SELECT id FROM hotels_client WHERE email = ? AND id = ?'
                 , array($client_email, $client_id));
@@ -54,8 +63,31 @@ class reservationActions extends autoreservationActions{
             $this->setFlash('warning', 'No such client with specified e-mail');
             $this->redirect('reservation/edit?id=' . $this->getRequestParameter('id'));
         }
-        else if(isset($client_id)){
+        if(isset($client_id)){
             $this->hotels_reservation->set('client_id', $client_id);
+        }
+        
+        //set the room id
+        
+        $room_id = $this->getRequestParameter('hotels_reservation[room_id]');
+        
+        if(isset($room_id)){
+            $this->hotels_reservation->set('room_id', $room_id);
+        }
+        
+        //calculate full cost of booking
+        
+        $days = round((
+            strtotime($this
+                ->getRequestParameter('hotels_reservation[reserved_to]')) 
+            - strtotime($this
+                ->getRequestParameter('hotels_reservation[reserved_from]'))) / 86400);
+        
+        $price = Doctrine_Manager::connection()
+            ->fetchOne('SELECT price FROM hotels_room WHERE id = ?', array($room_id));
+        
+        if(!empty($days) && $price){
+            $this->hotels_reservation->set('total', $price * $days);
         }
 
         parent::updateHotelsReservationFromRequest();

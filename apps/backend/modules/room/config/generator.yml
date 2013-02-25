@@ -4,9 +4,11 @@ generator:
     model_class: HotelsRoom
     list:
       title: Rooms
-      display: [ id, HotelsRoomType.type , _price_list  ]
+      display: [ number, HotelsRoomType.type , _price_list  ]
       filters: [ _type_id, price ]
       fields:
+        number:
+          name: Room number
         HotelsRoomType:
           type:
             name: Room type
@@ -20,5 +22,7 @@ generator:
         _delete: ~
     edit:
       title: Editing room "%%id%%"
-      display: [ _type_id, price, photo ]
-      
+      display: [ number, _type_id, price, photo ]
+      fields:
+        number:
+          name: Room number

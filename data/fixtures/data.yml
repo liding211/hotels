@@ -1,0 +1,56 @@
+---
+HotelsClient: 
+  HotelsClient_1: 
+    first_name: Anton
+    last_name: Tribulkevich
+    email: test@test.test
+    phone: 1233212
+    created_at: 2013-02-25 13:36:28
+    updated_at: 2013-02-25 13:36:31
+  HotelsClient_3: 
+    first_name: Alexander
+    last_name: Pypkin
+    email: asd@asd.asd
+    phone: 3322134
+    created_at: 2013-02-25 13:36:54
+    updated_at: 2013-02-25 13:36:56
+  HotelsClient_4: 
+    first_name: Vasia
+    last_name: Petiachkin
+    email: asd@asd.dsa
+    phone: 789789794
+    created_at: 2013-02-25 13:37:14
+    updated_at: 2013-02-25 13:37:17
+HotelsRoom: 
+  HotelsRoom_2: 
+    HotelsRoomType: HotelsRoomType_1
+    number: 1
+    price: 10000
+    photo: title
+    created_at: 2013-02-25 13:39:42
+    updated_at: 2013-02-25 13:39:44
+  HotelsRoom_3: 
+    HotelsRoomType: HotelsRoomType_3
+    number: 2
+    price: 4323
+    photo: in future =)
+    created_at: 2013-02-25 13:32:06
+    updated_at: 2013-02-25 13:32:06
+  HotelsRoom_5: 
+    HotelsRoomType: HotelsRoomType_2
+    number: 3
+    price: 123123
+    photo: asdad
+HotelsRoomType: 
+  HotelsRoomType_1: 
+    type: econom
+    created_at: 2013-02-25 13:32:06
+    updated_at: 2013-02-25 13:32:06
+  HotelsRoomType_2: 
+    type: vip
+    created_at: 2013-02-25 13:32:06
+    updated_at: 2013-02-25 13:32:06
+  HotelsRoomType_3: 
+    type: super vip
+    created_at: 2013-02-25 13:32:06
+    updated_at: 2013-02-25 13:32:06

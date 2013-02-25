@@ -34,6 +34,7 @@ HotelsRoom:
   actAs: [ Timestampable ]
   columns:
     type_id:    { type: integer(11), notnull: true }
+    number:     { type: integer(11), notnull: true }
     price:      { type: integer(11), notnull: true }
     photo:      { type: string(200) }
   relations:

@@ -21,6 +21,10 @@ class clientActions extends autoclientActions{
         }
     }
     
+    public function validateClientEmail(){
+        return true;
+    }
+    
     public function executeShow(){
         $client_id = (int) $this->getRequestParameter('id', 0);
         if(empty($client_id)){
