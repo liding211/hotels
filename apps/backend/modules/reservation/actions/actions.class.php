@@ -40,13 +40,18 @@ class reservationActions extends autoreservationActions{
     }
     
     protected function updateHotelsReservationFromRequest(){
-        $email = preg_replace('/[^\w@\.\-]+/i', '', $this->getRequestParameter('client[email]'));
+        
+        $client_email = preg_replace('/[^\w@\.\-]+/i', '', 
+            $this->getRequestParameter('client_email'));
+        $client_id = preg_replace('/[^\d]+/', '', 
+            $this->getRequestParameter('hotels_reservation[client_id]'));
 
-        $client_id = Doctrine_Manager::connection()
-            ->fetchOne('SELECT id FROM hotels_client WHERE email = ?', array($email));
+        $client = Doctrine_Manager::connection()
+            ->fetchOne('SELECT id FROM hotels_client WHERE email = ? AND id = ?'
+                , array($client_email, $client_id));
 
-        if($client_id === false){
-            $this->setFlash('warning', 'No such e-mail');
+        if($client === false){
+            $this->setFlash('warning', 'No such client with specified e-mail');
             $this->redirect('reservation/edit?id=' . $this->getRequestParameter('id'));
         }
         else if(isset($client_id)){

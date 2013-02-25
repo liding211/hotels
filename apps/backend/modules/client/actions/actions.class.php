@@ -38,7 +38,8 @@ class clientActions extends autoclientActions{
             ->fetchAll('SELECT id, email FROM hotels_client WHERE email LIKE ?', array("%$email%"));
         
         foreach($client_emails as $client_email){
-            $email_list[$client_email['id']] = $client_email['email'];
+            $email_list[] = array('label' => $client_email['email'], 
+                'value' => $client_email['id']);
         }
         
         $this->renderText(json_encode($email_list));
