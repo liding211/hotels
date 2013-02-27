@@ -3,8 +3,6 @@ fillin:
   enabled: false  # Enable the form repopulation
 
 fields:
-  hotels_reservation{room_id}:
-    required: { msg: Required }  
   hotels_reservation{reserved_from}:
     required: { msg: Required }
   hotels_reservation{reserved_to}:

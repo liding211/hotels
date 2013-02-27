@@ -8,7 +8,7 @@
     echo javascript_tag('
          $( "#'.$jquery_identifier.'" ).autocomplete({
             source: "'.url_for('client/get_email_list', true).'",
-            minLength: 2,
+            minLength: 0,
             focus: function( event, ui ) {
                 $( "#'.$jquery_identifier.'" ).val( ui.item.label );
                 return false;
