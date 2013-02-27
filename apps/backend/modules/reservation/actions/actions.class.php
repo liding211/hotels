@@ -15,13 +15,21 @@
  */
 class reservationActions extends autoreservationActions{
     
+    const SECONDS_PER_DAY = 86400;
+    
     public function validateEdit() {
         if($this->getRequest()->getMethod() == sfRequest::POST) {
             
+            $reservation = $this->getRequestParameter('hotels_reservation', array());
+            if(empty($reservation)){
+                $this->setFlash('error', 'Invalid request');
+                $this->redirect('reservation');
+            }
+            
             // check client
-            $client_email = filter_var($this->getRequestParameter('client_email'), 
+            $client_email = filter_var($reservation['client_email'], 
                 FILTER_VALIDATE_EMAIL);
-            $this->client_id = (int) $this->getRequestParameter('hotels_reservation[client_id]', 0);
+            $this->client_id = (int) $reservation['client_id'];
             if(empty($client_email)){
                $this->getRequest()->setError('hotels_reservation{client_email_edit}'
                     , 'Invalid e-mail value.');
@@ -39,27 +47,50 @@ class reservationActions extends autoreservationActions{
                     , 'No such client with specified e-mail.');
             }
             
-            // check room number
+            // check reservation data (from)
+            if( date('Y-m-d H:i') > $reservation['reserved_from'] ){
+                $this->getRequest()->setError('hotels_reservation{reserved_from}', 
+                    'Invalid selected date.');
+            }
             
-            $rooms = $this->getRequestParameter('hotels_reservation[room_id]', 0);
-            if(empty($rooms)){
+            // check reservation data (from)
+            if( $reservation['reserved_from'] > $reservation['reserved_to'] ){
+                $this->getRequest()->setError('hotels_reservation{reserved_to}', 
+                    'Invalid selected date.');
+            }
+            
+            $this->days = (int) ceil((strtotime($reservation['reserved_to']) - 
+                strtotime($reservation['reserved_from'])) / 
+                self::SECONDS_PER_DAY);
+            
+            // check room number
+            $this->total_cost = array();
+            if(empty($reservation['room_id'])){
                 $this->getRequest()->setError('hotels_reservation{room_edit}'
                     , 'Not specified room number.');
             }
-            $this->rooms_id = is_array($rooms) ? $rooms : array($rooms);
+            $this->rooms_id = is_array($reservation['room_id']) ? 
+                $reservation['room_id'] : array($reservation['room_id']);
             
-            // check reservation data (from)
-            
-            if( time() > strtotime($this->getRequestParameter('hotels_reservation[reserved_from]')) ){
-                $this->getRequest()->setError('hotels_reservation{reserved_from}'
-                    , 'Invalid selected date.');
+            foreach($this->rooms_id as $room_id){
+                if(!is_numeric($room_id)){
+                    $this->getRequest()->setError('hotels_reservation{room_edit}', 
+                        'Invalid room number.');
+                }else{
+                    //calculate full cost
+                    $this->total_cost[$room_id] = Doctrine_Manager::connection()
+                        ->fetchOne('SELECT price FROM hotels_room WHERE id = ?', 
+                            array($room_id)) * $this->days; 
+                }
             }
             
-            // check reservation data (from)
-            
-            if( strtotime($this->getRequestParameter('hotels_reservation[reserved_from]')) > strtotime($this->getRequestParameter('hotels_reservation[reserved_to]')) ){
-                $this->getRequest()->setError('hotels_reservation{reserved_to}'
-                    , 'Invalid selected date.');
+            // room total cost
+            if(
+                !empty($reservation['total']) && 
+                (int) $reservation['total'] !== array_sum($this->total_cost)
+            ){
+                $this->getRequest()->setError('hotels_reservation{total_edit}'
+                    , 'Do not match the amount of the reservation.');
             }
         }
         return !$this->getRequest()->hasErrors();
@@ -93,42 +124,18 @@ class reservationActions extends autoreservationActions{
     
     protected function updateHotelsReservationFromRequest(){
         
+        parent::updateHotelsReservationFromRequest();
+        
         $this->hotels_reservation->set('client_id', $this->client_id);
         
-
         //set the room id
-
-        if(isset($this->room_id)){
-            $this->hotels_reservation->set('room_id', $this->room_id);
-        }
+        $this->hotels_reservation->set('room_id', $this->room_id);
 
         //calculate full cost of booking
-
-        $days = round((
-            strtotime($this
-                ->getRequestParameter('hotels_reservation[reserved_to]')) 
-            - strtotime($this
-                ->getRequestParameter('hotels_reservation[reserved_from]'))) / 86400);
-
-        $price = Doctrine_Manager::connection()
-            ->fetchOne('SELECT price FROM hotels_room WHERE id = ?', array($this->room_id));
-        
-        if(!empty($days) && $price){
-            $this->hotels_reservation->set('total', $price * $days);
-        }
-
-        parent::updateHotelsReservationFromRequest();
+        $this->hotels_reservation->set('total', $this->total_cost[$this->room_id]);
     }
     
     public function executeEdit(){
-        
-        //go to parent execute function if this is new reservation
-        
-        $id = $this->getRequestParameter('id');
-        if(!isset($id)){
-            parent::executeEdit();
-            return;
-        }
         
         //define our execute function in else case
         
@@ -138,21 +145,19 @@ class reservationActions extends autoreservationActions{
             
             //multiple save or single updated
             
-            foreach($this->rooms_id as $key => $this->room_id){
+            foreach($this->rooms_id as $this->room_id){
                 try{
                     $this->hotels_reservation = $this->getHotelsReservationOrCreate();
                     $this->updateHotelsReservationFromRequest();
                     $this->saveHotelsReservation($this->hotels_reservation);
                     $this->setFlash('notice', 'Your modifications have been saved');
-                }
-                catch( Doctrine_Connection_Mysql_Exception $e){
+                }catch( Doctrine_Connection_Mysql_Exception $e){
                     $this->setFlash('warning', $e->errorMessage());
                     return $this->redirect('reservation/create');
                 }
             }
             
             //action after reservation
-            
             if ($this->getRequestParameter('save_and_add')){
                 return $this->redirect('reservation/create');
             }else if ($this->getRequestParameter('save_and_list')){
