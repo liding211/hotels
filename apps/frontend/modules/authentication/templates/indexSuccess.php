@@ -4,7 +4,8 @@
 	<div id="reg_form">
 		<p id="form_title">REGISTRATION</p>
 		<p>First time with us? Tell us about yourself!</p>
-		<form name="reg_form" class="reg">
+        <form name="reg_form" class="reg" method="post" 
+            action="<?php echo url_for('authentication/registration'); ?>">
 			<table>
 				<tr id="first_name">
 					<td>First name*</td>
@@ -31,7 +32,10 @@
 					</td>
 				</tr>
 				<tr id="reg_submit">
-					<td colspan=2 ><input type="button" id="reg" value="Registration" disabled></td>
+					<td colspan=2 >
+                        <input type="submit" name="submit"
+                            id="reg" value="registration" disabled>
+                    </td>
 				</tr>
 			</table>
 		</form>
@@ -42,7 +46,8 @@
 	<div id="login_form">
 		<p id="form_title">SIGN</p>
 		<p>Regular customer? Enter the e-mail!</p>
-		<form name="login_form" action="index.php?action=signin" method="POST" class="login">
+		<form method="post" action="<?=$sf_request->getUri();?>"
+            method="POST" class="login">
 			<table>
 				<tr id="client_email">
 					<td>E-mail</td>
@@ -52,7 +57,8 @@
 				</tr>
 				<tr id="login_submit">
 					<td colspan=2 >
-						<input type="button" id="login" value="enter" disabled>
+						<input type="submit" name="submit" id="login" 
+                            value="enter" disabled>
 					</td>
 				</tr>
 			</table>

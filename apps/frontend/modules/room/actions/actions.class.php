@@ -14,8 +14,6 @@ class roomActions extends sfActions
    * Executes index action
    *
    */
-  public function executeIndex()
-  {
-    $this->forward('default', 'module');
+  public function executeIndex(){
   }
 }

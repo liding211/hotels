@@ -9,9 +9,13 @@ default:
     keywords:     symfony, project
     language:     en
 
-  stylesheets:    [style]
+  stylesheets:    
+    -style 
+    -http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css
 
-  javascripts:    [jquery-1.9.0.min.js]
+  javascripts:    
+    -jquery-1.9.0.min.js
+    -http://code.jquery.com/ui/1.10.0/jquery-ui.js
 
   has_layout:     on
   layout:         layout

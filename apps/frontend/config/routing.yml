@@ -1,11 +1,11 @@
 # default rules
 homepage:
   url:   /
-  param: { module: authentication, action: index }
+  param: { module: room, action: index }
 
-main:
-  url:   /main
-  param: { module: authentication, action: authentication }
+logout:
+  url:   /logout
+  param: { module: authentication, action: logout }
 
 default_symfony:
   url:   /symfony/:action/*
