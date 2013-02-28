@@ -9,4 +9,6 @@ all:
   propel:
     class:      sfDoctrineDatabase
     param:
-      dns: sqlite:///<?php echo dirname(__FILE__); ?>/doctrine.db
+      dsn: 'mysql:host=localhost;dbname=doctrine_hotels'
+      username: root
+      password: ''
