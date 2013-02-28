@@ -13,7 +13,7 @@ class authenticationActions extends sfActions{
      * Executes index action
      *
      */
-    public function executeAuthentication(){
+    public function executeIndex(){
         
         //$this->forward('authentication', 'signin');
         //$this->redirect('authentication/signin');

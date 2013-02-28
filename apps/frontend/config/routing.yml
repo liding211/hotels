@@ -1,7 +1,7 @@
 # default rules
 homepage:
   url:   /
-  param: { module: authentication, action: authentication }
+  param: { module: authentication, action: index }
 
 main:
   url:   /main

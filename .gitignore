@@ -3,3 +3,4 @@ log
 /nbproject/private/
 /nbproject/
 master
+/lib/model/doctrine/generated/
