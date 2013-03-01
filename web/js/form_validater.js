@@ -8,10 +8,10 @@ function inputTest(re, str){
 var reg_form = 0;//кол-во проверенных полей	для формы регистрации
 		
 
-$('[name = first_name]').blur(
+$('#registration_first_name').blur(
 	function(){
 	$('.err').remove();
-		$("form[name='login_form'] tr").css("background-color", "#eeeeee");
+		$("#registration_first_name tr").css("background-color", "#eeeeee");
 		if(checkValueLeng(this, "first_name")){
 			reg_form++;//добавляем к сумме еще одно проверенное поле
 			checkButton('reg', 4);//разблокируем кнопку подтверждения формы
@@ -19,10 +19,10 @@ $('[name = first_name]').blur(
 	}
 );	
 
-$('[name = last_name]').blur(
+$('#registration_last_name').blur(
 	function(){
 	$('.err').remove();
-		$("form[name='login_form'] tr").css("background-color", "#eeeeee");
+		$("#registration_last_name tr").css("background-color", "#eeeeee");
 		if(checkValueLeng(this, "last_name")){
 			reg_form++;//добавляем к сумме еще одно проверенное поле
 			checkButton('reg', 4);//разблокируем кнопку подтверждения формы
@@ -30,10 +30,10 @@ $('[name = last_name]').blur(
 	}
 );	
 
-$('[name = email]').keyup(
+$('#registration_email').keyup(
 	function(){
 	$('.err').remove();
-		$("form[name='login_form'] tr").css("background-color", "#eeeeee");
+		$("#registration_email tr").css("background-color", "#eeeeee");
 		if(checkValueLeng(this, "email", "email")){
 			reg_form++;//добавляем к сумме еще одно проверенное поле
 			checkButton('reg', 4);//разблокируем кнопку подтверждения формы
@@ -41,10 +41,10 @@ $('[name = email]').keyup(
 	}
 );			
 		
-$('[name = phone]').keyup(
+$('#registration_phone').keyup(
 	function(){
 		$('.err').remove();
-		$("form[name='login_form'] tr").css("background-color", "#eeeeee");
+		$("#registration_phone tr").css("background-color", "#eeeeee");
 		if(checkValueLeng(this, "phone", "phone")){
 			reg_form++;//добавляем к сумме еще одно проверенное поле
 			checkButton('reg', 4);//разблокируем кнопку подтверждения формы
@@ -54,12 +54,10 @@ $('[name = phone]').keyup(
 
 
 
-$('[name = email_login]').keyup(
+$('#signin_email').keyup(
 	function(){
 		$("tr[id^='reg_err_']").remove();
-		$("form[name='reg_form'] tr").css("background-color", "#eeeeee");
-		/*err = $('.err');
-		err.remove();*/
+		$("#signin_email tr").css("background-color", "#eeeeee");
 		if(checkValueLeng(this, "client_email", "email")){
 			$('#login').removeAttr('disabled');
 		}
@@ -101,7 +99,8 @@ function checkValueLeng(val, domElem, type){
 	}
 	
 	if (type == 'phone'){//проверка поля, помеченного как номер телефона
-		if (!inputTest(/^((38|\+38)[\- ]?)?(\(?\d{4}\)?[\- ]?)?[\d\- ]{6,10}$/, val.value)){
+		//if (!inputTest(/^((38|\+38)[\- ]?)?(\(?\d{4}\)?[\- ]?)?[\d\- ]{6,10}$/, val.value)){
+        if (!inputTest(/[0-9 \(\)\-]{6,20}/, val.value)){
 			parent = $('<tr></tr>').attr("id", "reg_err_info_" + domElem).attr("class", "err");
 		
 			$('<td></td>')

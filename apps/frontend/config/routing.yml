@@ -3,9 +3,15 @@ homepage:
   url:   /
   param: { module: room, action: index }
 
+
+
 logout:
   url:   /logout
   param: { module: authentication, action: logout }
+
+login:
+  url:   /login
+  param: { module: authentication, action: index }
 
 default_symfony:
   url:   /symfony/:action/*

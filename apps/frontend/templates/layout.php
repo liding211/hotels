@@ -12,7 +12,11 @@
 </head>
 <body>
     <div id="main_div">
-        <?php include_partial('global/user_menu'); ?>
+        <?php 
+            if($sf_user->hasCredential('user') or $sf_user->hasCredential('admin')){
+                include_partial('global/user_menu');
+            } 
+        ?>
         <?php echo $sf_data->getRaw('sf_content') ?>
     </div>
 
