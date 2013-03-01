@@ -1,0 +1,12 @@
+## YAML Template.
+---
+fillin:
+  enabled: true  # Enable the form repopulation
+    
+fields:
+  hotels_room_type{type}:
+    required: { msg: The type field cannot be left blank }
+    sfDoctrineUniqueValidator:
+      class:        HotelsRoomType
+      column:       type
+      unique_error: Such type of room already exists. Please choose another one.

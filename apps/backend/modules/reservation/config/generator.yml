@@ -1,0 +1,44 @@
+generator:
+  class: sfDoctrineAdminGenerator
+  param:
+    model_class: HotelsReservation
+    list:
+      title: Reservations
+      fields:
+        total_list:
+          name: Full cost
+        client_name_filter:
+          name: Client name
+        email_filter:
+          name: Client e-mail
+        HotelsClient:
+          full_name:
+            name: Client
+        HotelsRoom:
+          number:
+            name: Room number
+      display: [ HotelsClient.full_name , HotelsRoom.number, _total_list, hash, reserved_from, reserved_to ]
+      filters: [ _client_name_filter, _email_filter, reserved_from, reserved_to ]
+      max_per_page: 20
+      object_actions:
+        _edit: ~
+        show: 
+          name: Show reservation
+          action: show
+          icon: /sf/sf_admin/images/default_icon.png
+        _delete: ~
+    edit:
+      title: Editing reservation "%%id%%"
+      display: 
+        - _client_email_edit
+        - _room_edit
+        - _total_edit
+        - reserved_from
+        - reserved_to
+      fields:
+        client_email_edit:
+          name: Client e-mail
+        room_edit:
+          name: Room number
+        total_edit:
+          name: Full cost

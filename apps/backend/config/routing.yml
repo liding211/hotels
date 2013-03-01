@@ -1,11 +1,11 @@
 # default rules
 homepage:
   url:   /
-  param: { module: default, action: index }
+  param: { module: room, action: index }
 
-default_symfony:
-  url:   /symfony/:action/*
-  param: { module: default }
+get_email_list:
+  url:   /client/get_email_list
+  param: { module: client, action: GetEmailList }
 
 default_index:
   url:   /:module

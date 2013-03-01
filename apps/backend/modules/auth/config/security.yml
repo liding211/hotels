@@ -1,0 +1,6 @@
+all:
+  is_secure:  off
+
+user:
+  login: admin
+  password: admin

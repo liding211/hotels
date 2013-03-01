@@ -22,7 +22,9 @@ all:
   .settings:
     # Cache settings
     lazy_cache_key:         on        # Delays creation of a cache key until after checking whether an action or partial is cacheable
-
+  .actions:
+    login_module:    auth
+    login_action:    login
 #all:
 #  .actions:
 #    default_module:         default   # Default module and action to be called when
