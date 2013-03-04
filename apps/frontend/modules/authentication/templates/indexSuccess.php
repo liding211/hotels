@@ -79,7 +79,7 @@
 				<tr id="login_submit">
 					<td colspan=2 >
 						<input type="submit" name="submit" id="login" 
-                            value="enter" disabled>
+                            value="signin" disabled>
 					</td>
                 </tr>
                 <?php if ($sf_request->hasErrors()): ?>

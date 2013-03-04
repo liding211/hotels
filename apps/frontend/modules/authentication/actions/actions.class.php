@@ -11,69 +11,58 @@
 class authenticationActions extends sfActions{
     public function validateIndex() {
         if($this->getRequest()->getMethod() == sfRequest::POST){
-            if($this->getRequestParameter('submit') == 'enter'){
+            $this->client = new HotelsClient();
+            if($this->getRequestParameter('submit') == 'signin'){
                 $email = filter_var($this->getRequestParameter('signin[email]', ''), 
                     FILTER_VALIDATE_EMAIL);
-
-                $client = Doctrine_Manager::connection()->
-                    fetchRow('SELECT id, first_name FROM hotels_client 
-                        WHERE email = ?', 
-                        array($email));
-                if(empty($client)){
+                
+                if(!$this->client->isClient($email)){
                     $this->getRequest()->
                         setError('signin_email', 'Invalid e-mail');
-                }else{
-                    $this->getUser()->setAttribute('id', $client['id']);
-                    $this->getUser()->
-                        setAttribute('first_name', $client['first_name']);
                 }
             }
             if($this->getRequestParameter('submit') == 'registration') {
-                $this->registration = $this->getRequestParameter('registration'); 
+                $registration = $this->getRequestParameter('registration'); 
 
                 //check first_name
-                $this->registration['first_name'] = filter_var(
-                    $this->registration['first_name'], 
+                $registration['first_name'] = filter_var(
+                    $registration['first_name'], 
                     FILTER_VALIDATE_REGEXP, 
                     array('options' => array('regexp' => '/[\w ]+/i'))
                 );
-                if(empty($this->registration['first_name'])){
+                if(empty($registration['first_name'])){
                     $this->getRequest()->
                         setError('registration_first_name', 'Invalid first name');
                 }
 
                 //check last_name
-                $this->registration['last_name'] = filter_var(
-                    $this->registration['last_name'], 
+                $registration['last_name'] = filter_var(
+                    $registration['last_name'], 
                     FILTER_VALIDATE_REGEXP, 
                     array('options' => array('regexp' => '/[\w ]+/i'))
                 );
-                if(empty($this->registration['last_name'])){
+                if(empty($registration['last_name'])){
                     $this->getRequest()->
                         setError('registration_last_name', 'Invalid last name');
                 }
 
                 //check email
-                $this->registration['email'] = filter_var($this->registration['email'], 
+                $registration['email'] = filter_var($registration['email'], 
                     FILTER_VALIDATE_EMAIL);
-                if(empty($this->registration['email'])){
+                if(empty($registration['email'])){
                     $this->getRequest()->
                         setError('registration_email', 'Invalid email');
                 }
-                $client = Doctrine_Manager::connection()->
-                    fetchRow('SELECT id FROM hotels_client 
-                        WHERE email = ?', 
-                        array($this->registration['email']));
-                if(!empty($client)){
+                if($this->client->isClient($registration['email'])){
                     $this->getRequest()->
                         setError('registration_email', 'That e-mail already exist');
                 }
 
                 //check phone number
-                $this->registration['phone'] = filter_var($this->registration['phone'], 
+                $registration['phone'] = filter_var($registration['phone'], 
                     FILTER_VALIDATE_REGEXP,
                     array('options' => array('regexp' => '/[0-9 \(\)\-]{6,20}/')));
-                if(empty($this->registration['phone'])){
+                if(empty($registration['phone'])){
                     $this->getRequest()->
                         setError('registration_phone', 'Invalid phone number');
                 }
@@ -84,7 +73,11 @@ class authenticationActions extends sfActions{
 
     public function executeIndex () {
         if($this->getRequest()->getMethod() == sfRequest::POST) {
-            if($this->getRequestParameter('submit') == 'enter'){
+            if($this->getRequestParameter('submit') == 'signin'){
+                $this->getUser()->setAttribute('client', 
+                    $this->client->getClientByEmail(
+                        $this->getRequestParameter('signin[email]'))
+                    );
                 $this->getUser()->setAuthenticated(true);
                 $this->getUser()->addCredential('user');
                 $this->redirectIf($this->getUser()->hasCredential('user'), 
@@ -94,9 +87,10 @@ class authenticationActions extends sfActions{
                 $this->hotels_client = new HotelsClient();
                 $this->updateHotelsClientFromRequest();
                 $this->hotels_client->save();
-                $this->getUser()->setAttribute('id', $this->hotels_client->id);
-                $this->getUser()->
-                    setAttribute('first_name', $this->hotels_client->first_name);
+                $this->getUser()->setAttribute('client', 
+                    $this->client->getClientByEmail(
+                        $this->getRequestParameter('signin[email]'))
+                    );
                 $this->getUser()->setAuthenticated(true);
                 $this->getUser()->addCredential('user');
                 return $this->redirect($this->getRequest()->getUri());
@@ -119,6 +113,7 @@ class authenticationActions extends sfActions{
     }
 
     public function executeLogout () {
+        $this->getUser()->setAttribute('client', '');
         $this->getUser()->setAuthenticated(false);
         $this->redirect('@homepage');
     }

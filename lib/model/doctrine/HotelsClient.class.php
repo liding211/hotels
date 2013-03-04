@@ -13,6 +13,8 @@ class HotelsClient extends BaseHotelsClient{
     }
     
     public function getClientByEmail($email){
-        return $this->getTable('HotelsClient')->findByDql(" email = ? ", array($email));
+        return Doctrine_Manager::connection()->fetchRow(
+            'SELECT id, first_name FROM hotels_client WHERE email = ?', 
+            array($email));
     }
 }
