@@ -7,4 +7,12 @@ class HotelsClient extends BaseHotelsClient{
     public function getFullName(){
         return $this->first_name . ' ' . $this->last_name;
     }
+    
+    public function isClient($email){
+        return (bool) $this->getClientByEmail($email);
+    }
+    
+    public function getClientByEmail($email){
+        return $this->getTable('HotelsClient')->findByDql(" email = ? ", array($email));
+    }
 }

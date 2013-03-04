@@ -4,7 +4,7 @@ var answer = [];
 //ajax query 
 function getAjaxContent(){
 	$.post(
-		'room.php',{
+		'rooms_list',{
 			from: $('#from').val(),
 			to: $('#to').val()
 		},
