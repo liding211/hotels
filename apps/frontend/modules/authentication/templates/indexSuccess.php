@@ -5,7 +5,7 @@
 		<p id="form_title">REGISTRATION</p>
 		<p>First time with us? Tell us about yourself!</p>
         <form name="reg_form" class="reg" method="post" 
-            action="<?php echo url_for('authentication/registration'); ?>">
+            action="<?=$sf_request->getUri();?>">
 			<table>
 				<tr id="first_name">
 					<td>First name*</td>
