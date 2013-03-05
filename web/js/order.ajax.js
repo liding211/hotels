@@ -1,6 +1,5 @@
 $("#order").click(
 	function(){
-		
 		if($('#from').val() && $('#to').val()){
 			$('#err_info').remove();
 			makeOrder();
@@ -28,8 +27,9 @@ $("#order").click(
 );
 
 function makeOrder(){
-	$.post('order.php', 
+	$.post(order_link, 
 		  {
+            id: room_id,
 			from: $("#from").val(),
 			to: $("#to").val()
 		  }, 

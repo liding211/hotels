@@ -4,7 +4,7 @@ var answer = [];
 //ajax query 
 function getAjaxContent(){
 	$.post(
-		'rooms_list',{
+		'room/getRoomsList',{
 			from: $('#from').val(),
 			to: $('#to').val()
 		},
@@ -40,6 +40,7 @@ function getHTML(method){
 			var price = data[index].price / 100;
 			var id = data[index].id;
 			var type = data[index].type;
+            var number = data[index].number;
 
 			if (data[index].photo) {
 				photo_url = data[index].id + '/' + data[index].photo;
@@ -52,7 +53,8 @@ function getHTML(method){
 			.attr("class", "room")
 			.html(
 				'<img src="uploads/' + photo_url + '" class="photo">' + 
-				'<p id="type"><a href="index.php?cntr=room&action=view&room_id=' + id + '">' + type + '</a></p>' +
+				'<p id="type"><a href="room/show/' + id + '">' + 
+                number + ' - ' + type + '</a></p>' +
 				'<p><span id="price">' + price + '</span>$</p>'
 			)
 			.appendTo("#content");

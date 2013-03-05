@@ -12,4 +12,32 @@ class HotelsRoom extends BaseHotelsRoom{
         $room_type = Doctrine::getTable('HotelsRoomType')->find($this->getId());
         return $room_type->get('type');
     }
+    
+    public function getList($from = '', $to = ''){
+		$all_rooms = Doctrine::getTable('HotelsRoom')->findAll();
+		if(!empty($from) && !empty($to)){
+			foreach($all_rooms as $key => $row){
+				if(!$this->isRoomFree($from, $to, $row->id)){
+					unset($all_rooms[$key]);
+				}
+			}
+		}
+		return $all_rooms;
+	}
+    
+    public function isRoomFree ($from, $to, $id) { 
+		
+		$query = "SELECT id FROM hotels_reservation 
+                    WHERE
+                        room_id = ? 
+                    AND 
+                        ((reserved_from >= ? AND reserved_to <= ?) OR
+                        ( reserved_from < ? AND ? < reserved_to ) OR 
+                        ( reserved_from < ? AND ? < reserved_to ))";
+		
+		$bind_params = array($id, $from, $to, $from, $from, $to, $to);
+		
+		$result = Doctrine_Manager::connection()->fetchRow($query, $bind_params);
+        return empty($result);
+	}
 }

@@ -9,11 +9,13 @@
 	<a id="sort_category" href="#">category</a>.
 </form>
 <div id="content"></div>
-
-<script type="text/javascript">
-	$(function() {
-		$("#from").datepicker({ dateFormat: "yy-mm-dd", minDate: 0 });
-		$("#to").datepicker({ dateFormat: "yy-mm-dd", minDate: 1 });
-	});
-</script>
-<script type="text/javascript" src="js/room_list.ajax.js"></script>
+<?php
+    use_helper('Javascript');
+    echo javascript_tag('
+        $(function(){
+            $("#from").datepicker({ dateFormat: "yy-mm-dd", minDate: 0 }); 
+            $("#to").datepicker({ dateFormat: "yy-mm-dd", minDate: 1 });
+        })
+    ');
+    echo javascript_include_tag('room_list.ajax.js'); 
+?>

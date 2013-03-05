@@ -22,4 +22,8 @@ class HotelsRoomTable extends Doctrine_Table{
         }
         return $room_info;
     }
+    
+    public static function getRoomById($id){
+        return Doctrine::getTable('HotelsRoom')->find($id);
+    }
 }

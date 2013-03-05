@@ -3,10 +3,14 @@ homepage:
   url:   /
   param: { module: room, action: index }
 
-rooms_list:
-  url:   /rooms_list
-  
+make_order:
+  url:   /make_order
+  param: { module: order, action: makeOrder}
 
+show_room:
+  url:   /room/show/:id
+  param: { module: room, action: show }  
+  
 logout:
   url:   /logout
   param: { module: authentication, action: logout }
